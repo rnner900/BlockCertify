@@ -16,4 +16,4 @@ run `npm install -g truffle`
 ## Run application:
 Make sure ganache is running (on HTTP://127.0.0.1:7545)
 run `truffle migrate --reset`
-run `npm start`
+run `npm run dev`
