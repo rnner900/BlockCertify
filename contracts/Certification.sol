@@ -7,6 +7,7 @@ contract Certification {
         address publisher;
         address participant;
         string title;
+        string course;
     }
 
     struct Course {
@@ -14,17 +15,22 @@ contract Certification {
         string title;
     }
 
-    mapping(address => Certifate) public certificates;
+    mapping(uint => Certifate) public certificates; // adress is the collector
     mapping(address => Course[]) public courses;
     mapping(uint => address[]) public courseParticipants;
 
     uint public certificateCount;
     uint public courseCount;
 
-    function issueCertificates (uint _courseId, string memory _title) public {
+     function addCertificate (address _collector, string memory _title, string memory _course) public {
         certificateCount++;
-        certificates[] = Certifate(certificateCount, _courseId, msg.sender, _title);
+        certificates[certificateCount] = Certifate(certificateCount, msg.sender, _collector, _title, _course);
     }
+
+    // function issueCertificates (uint _courseId, string memory _title) public {
+    //     certificateCount++;
+    //     certificates[] = Certifate(certificateCount, _courseId, msg.sender, _title);
+    // }
 
     function addCourse (string memory _title) public {
         courseCount++;
@@ -35,7 +41,7 @@ contract Certification {
 
     function addParticipant(uint _courseId, address _participant) public {
 
-        require(courses[msg.sender].length == 0, "No course found!");
+        require(courses[msg.sender].length > 0, "No course found!");
         
         // check if course exists
         Course[] memory myCourses = courses[msg.sender];
@@ -50,8 +56,8 @@ contract Certification {
             break;
         }
 
-        require(!exists, "Course does not exist!");
-        require(!participantExists(_courseId, _participant), "Participant already in course!");
+        require(exists, "Course does not exist!");
+        require(participantExists(_courseId, _participant), "Participant already in course!");
 
         courseParticipants[_courseId].push(_participant);
     }
@@ -73,9 +79,15 @@ contract Certification {
         address participantA = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
         address participantB = 0xfC9a8E621F0D8821A770a5Cee4cEF8a90D387e8D;
         
-        addParticipant(0, participantA);
-        addParticipant(1, participantB);
+        //addParticipant(0, participantA);
+        //addParticipant(1, participantB);
 
-        issueCertificates(0, "Web Engineer");
+        //issueCertificates(0, "Web Engineer");
+
+
+        // test adding of certificates
+        address receiver = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
+        addCertificate(receiver, "Web Engineer", courses[msg.sender][0].title);
+        addCertificate(receiver, "Power Engineer", courses[msg.sender][1].title);
     }
 }
