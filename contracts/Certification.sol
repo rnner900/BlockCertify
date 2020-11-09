@@ -15,16 +15,18 @@ contract Certification {
         string title;
     }
 
-    mapping(uint => Certifate) public certificates; // adress is the collector
+    mapping(uint => Certifate) public certificates; // TODO:remap to adress
     mapping(address => Course[]) public courses;
     mapping(uint => address[]) public courseParticipants;
+
+    event logCourses(address[]);
 
     uint public certificateCount;
     uint public courseCount;
 
      function addCertificate (address _collector, string memory _title, string memory _course) public {
-        certificateCount++;
         certificates[certificateCount] = Certifate(certificateCount, msg.sender, _collector, _title, _course);
+        certificateCount++;
     }
 
     // function issueCertificates (uint _courseId, string memory _title) public {
@@ -33,10 +35,10 @@ contract Certification {
     // }
 
     function addCourse (string memory _title) public {
-        courseCount++;
         courses[msg.sender].push(
             Course(courseCount, _title)
         );
+        courseCount++;
     }
 
     function addParticipant(uint _courseId, address _participant) public {
@@ -45,6 +47,7 @@ contract Certification {
         
         // check if course exists
         Course[] memory myCourses = courses[msg.sender];
+        //emit logCourses(courses[msg.sender]);
         uint length = myCourses.length;
         bool exists = false;
 
@@ -57,7 +60,7 @@ contract Certification {
         }
 
         require(exists, "Course does not exist!");
-        require(participantExists(_courseId, _participant), "Participant already in course!");
+        require(!participantExists(_courseId, _participant), "Participant already in course!");
 
         courseParticipants[_courseId].push(_participant);
     }
@@ -69,6 +72,7 @@ contract Certification {
                 return true;
             }
         }
+        return false;
     }
 
 
@@ -79,8 +83,8 @@ contract Certification {
         address participantA = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
         address participantB = 0xfC9a8E621F0D8821A770a5Cee4cEF8a90D387e8D;
         
-        //addParticipant(0, participantA);
-        //addParticipant(1, participantB);
+        addParticipant(0, participantA);
+        addParticipant(1, participantB);
 
         //issueCertificates(0, "Web Engineer");
 

@@ -35,6 +35,18 @@ App = {
         });
     },
 
+    updateBalance: function () {
+        return web3.fromWei(
+            web3.eth.getBalance(App.account, function (err, balance) {
+                if (err) console.log(err);
+                else {
+                    $('#accountBalance').html('Your Balance: ' + web3.fromWei(balance, 'ether') + ' ETH');
+                    App.balance = balance;
+                }
+            })
+        );
+    },
+
     render: function () {
         var certificationInstance;
         var loader = $('#loader');
@@ -44,34 +56,30 @@ App = {
         // content.hide();
 
         // Load account data
-        web3.eth.getCoinbase(async function (err, account) {
-            if (err === null) {
+        web3.eth.getCoinbase(function (err, account) {
+            if (err) console.log(err);
+            else {
                 if (window.ethereum) {
                     ethereum.enable().then(function (acc) {
                         App.account = acc[0];
                         $('#accountAddress').html('Your Account: ' + App.account);
+                        balance = App.updateBalance();
                     });
                 }
-
-                balance = web3.eth.getBalance(account, function (err, balance) {
-                    $('#accountBalance').html('Your Balance: ' + balance);
-                    console.log(balance);
-                    App.balance = balance;
-                });
             }
         });
 
         // Load contract data
         App.contracts.Certification.deployed()
             .then(function (instance) {
+                console.log(instance);
                 certificationInstance = instance;
                 return certificationInstance.certificateCount();
             })
             .then(function (certificateCount) {
                 var certificatesResults = $('#certificatesResults');
                 certificatesResults.empty();
-
-                for (var i = 1; i <= certificateCount; i++) {
+                for (var i = 0; i < certificateCount; i++) {
                     certificationInstance.certificates(i).then(function (certificate) {
                         var id = certificate[0];
                         var publisher = certificate[1];
@@ -86,6 +94,19 @@ App = {
                 }
                 loader.hide();
                 content.show();
+                return certificationInstance.courseCount();
+            })
+            .then(function (courseCount) {
+                console.log(courseCount);
+                var courseOverview = $('#courseOverview');
+                courseOverview.empty();
+                for (var i = 0; i < courseCount; i++) {
+                    certificationInstance.courses('0x90109723f4f1982bdaf7a41f8a2a4811ec91221b', i).then(function (course) {
+                        var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><tr>'; //+ collector + '</td><td>' + title + '</td><td>' + course + '</td></tr>';
+                        courseOverview.append(courseTemplate);
+                        console.log(course);
+                    });
+                }
             })
             .catch(function (error) {
                 console.warn(error);
@@ -102,9 +123,8 @@ App = {
                 return instance.addCertificate(collector, title, course, { from: App.account });
             })
             .then(function (result) {
-                // Wait for votes to update
-                // $("#content").hide();
-                // $("#loader").show();
+                // Render the new balance and all contracts
+                App.render();
             })
             .catch(function (err) {
                 console.error(err);
