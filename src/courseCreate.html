@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/app.css">
+    
+    <title>Create Course</title>
+</head>
+<body>
+    <!-- Include Header -->
+    <iframe src="./header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+    
+    <!-- Content -->
+    <div class="container">
+        <br/>
+        <h1>Create Course</h1>
+        <br/>
+        <div class="row">
+            <div class="col-6">
+                <form>
+                    <div class="form-group">
+                        <label for="inputTitle">Certificate Course</label>
+                        <input id="course-title-input" type="text" class="form-control" placeholder="Course title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Transaction Cost</label>
+                        <input type="text" class="form-control" placeholder="0.123 ETH" readonly />
+                    </div>
+                    <br>
+                </form>
+            </div>
+            <div class="col-6">
+                <label>Course Participants</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Participant address" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="button">Add</button>
+                    </div>
+                </div>
+
+                <br />
+                <ul class="list-group" id="course-participant-list">
+                    <li class="list-group-item">
+                        0x09324890901230908923423432
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                    <li class="list-group-item">
+                        0x09324890901230908923423432
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                    <li class="list-group-item">
+                        0x09324890901230908923423432
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                    <li class="list-group-item">
+                        0x09324890901230908923423432
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <a href="./courseList.html"><button type="button" class="btn btn-secondary float-left" id="btnAddCertificate">Cancel</button></a>
+        <button onclick="App.addCertificate();" type="button" class="btn btn-success float-right" id="btnAddCertificate">Create Course</button>
+        <div class="clearfix"></div>
+    </div>
+    
+    <!-- Include Footer -->
+    <iframe src="./footer.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+    
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="./js/circleType.js"></script>
+    <script src="./js/jquery.lettering-0.6.1.min.js"></script>
+    <script src="./js/createCourse.js"></script>
+</body>
+</html>
