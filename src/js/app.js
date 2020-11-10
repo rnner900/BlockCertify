@@ -2,17 +2,18 @@ App = {
     web3Provider: null,
     contracts: {},
     account: '0x0',
+    certificationInstance: null,
 
     init: function () {
         return App.initWeb3();
     },
 
-    initWeb3: function () {
+    initWeb3: async function () {
         /* Web3:
          * web3.js is a javascript library that allows our client-side
          * application to talk to the blockchain. We configure web3 here.
          */
-        if (typeof web3 !== 'undefined') {
+        if (window.ethereum) {
             // If a web3 instance is already provided by Meta Mask.
             App.web3Provider = web3.currentProvider;
             web3 = new Web3(web3.currentProvider);
@@ -21,6 +22,7 @@ App = {
             App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
             web3 = new Web3(App.web3Provider);
         }
+        await ethereum.enable();
         return App.initContract();
     },
 
@@ -48,63 +50,61 @@ App = {
     },
 
     render: function () {
-        var certificationInstance;
         var loader = $('#loader');
         var content = $('#content');
 
-        // loader.show();
-        // content.hide();
+        // for testing purposes
+        var contractAddress;
 
         // Load account data
         web3.eth.getCoinbase(function (err, account) {
             if (err) console.log(err);
             else {
-                if (window.ethereum) {
-                    ethereum.enable().then(function (acc) {
-                        App.account = acc[0];
-                        $('#accountAddress').html('Your Account: ' + App.account);
-                        balance = App.updateBalance();
-                    });
-                }
+                App.account = account;
+                $('#accountAddress').html('Your Account: ' + App.account);
+                balance = App.updateBalance();
             }
         });
 
         // Load contract data
         App.contracts.Certification.deployed()
             .then(function (instance) {
-                console.log(instance);
-                certificationInstance = instance;
-                return certificationInstance.certificateCount();
+                App.certificationInstance = instance;
+                return App.certificationInstance.contractAddress();
             })
-            .then(function (certificateCount) {
+            .then(function (_contractAddress) {
                 var certificatesResults = $('#certificatesResults');
                 certificatesResults.empty();
-                for (var i = 0; i < certificateCount; i++) {
-                    certificationInstance.certificates(i).then(function (certificate) {
-                        var id = certificate[0];
-                        var publisher = certificate[1];
-                        var collector = certificate[2];
-                        var title = certificate[3];
-                        var course = certificate[4];
+                contractAddress = _contractAddress;
+                // console.log('contractAdress: ' + contractAddress);
+                App.certificationInstance.getCertificateCount(App.account).then(function (certificateCount) {
+                    for (let i = 0; i < certificateCount; i++) {
+                        App.certificationInstance.certificates(App.account, i).then(function (cert) {
+                            // Render certificate Result
+                            var certificateTemplate = '<tr><td>' + cert[0] + '</td><td>' + cert[1] + '</td><td>' + cert[2] + '</td><td>' + cert[3] + '</td><td>' + cert[4] + '</td></tr>';
+                            certificatesResults.append(certificateTemplate);
+                        });
+                    }
+                });
 
-                        // Render candidate Result
-                        var certificateTemplate = '<tr><th>' + id + '</th><td>' + publisher + '</td><td>' + collector + '</td><td>' + title + '</td><td>' + course + '</td></tr>';
-                        certificatesResults.append(certificateTemplate);
-                    });
-                }
                 loader.hide();
                 content.show();
-                return certificationInstance.courseCount();
+                return App.certificationInstance.courseCount();
             })
             .then(function (courseCount) {
-                console.log(courseCount);
+                // show courses of constructors address, TODO: show users courses
                 var courseOverview = $('#courseOverview');
                 courseOverview.empty();
-                for (var i = 0; i < courseCount; i++) {
-                    certificationInstance.courses('0x90109723f4f1982bdaf7a41f8a2a4811ec91221b', i).then(function (course) {
-                        var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><tr>'; //+ collector + '</td><td>' + title + '</td><td>' + course + '</td></tr>';
-                        courseOverview.append(courseTemplate);
-                        console.log(course);
+                for (let i = 0; i < courseCount; i++) {
+                    App.certificationInstance.getCourseParticipants(i).then(function (participants) {
+                        App.certificationInstance.courses(contractAddress, i).then(function (course) {
+                            var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><td>';
+                            for (let j = 0; j < participants.length; j++) {
+                                courseTemplate += participants[j] + '<br>';
+                            }
+                            courseTemplate += '</td></tr>';
+                            courseOverview.append(courseTemplate);
+                        });
                     });
                 }
             })
@@ -120,7 +120,7 @@ App = {
 
         App.contracts.Certification.deployed()
             .then(function (instance) {
-                return instance.addCertificate(collector, title, course, { from: App.account });
+                return instance.addCertificate(collector, title, 7, course);
             })
             .then(function (result) {
                 // Render the new balance and all contracts
@@ -132,8 +132,6 @@ App = {
     },
 };
 
-$(function () {
-    $(window).load(function () {
-        App.init();
-    });
+window.addEventListener('load', function () {
+    App.init();
 });
