@@ -1,7 +1,7 @@
 $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('courceId')){
-        let certificateId = searchParams.get('courseId');
+    if (searchParams.has('certificateId')){
+        let certificateId = searchParams.get('certificateId');
         console.log(certificateId);
     }
 });
