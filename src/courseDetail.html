@@ -19,7 +19,7 @@
   <!-- Content -->
   <div class="container">
     <br/>
-    <h1>Course #123433</h1>
+    <h1 id="course-headline">Course</h1>
     <br/>
     <div class="row">
       <div class="col-6">
@@ -30,18 +30,13 @@
           </div>
           
           <div class="form-group">
-            <label>Course Owner</label>
-            <input type="text" class="form-control" placeholder="0x123423422" readonly />
+            <label>Course Owner / Certificate Issuer</label>
+            <input id="course-issuer-input" type="text" class="form-control" placeholder="0x0000" readonly />
           </div>
           
           <div class="form-group">
             <label>Transaction</label>
-            <input type="text" class="form-control" placeholder="0x123423422" readonly />
-          </div>
-          
-          <div class="form-group">
-            <label>Transaction Cost</label>
-            <input type="text" class="form-control" placeholder="0.123 ETH" readonly />
+            <input id="course-transaction-input" type="text" class="form-control" placeholder="0x0000" readonly />
           </div>
           <br>
         </form>
@@ -49,44 +44,20 @@
       <div class="col-6">
         <label>Course Participants</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Participant address" />
+          <input id="recipient-add-input" type="text" class="form-control" placeholder="Participant address" />
           <div class="input-group-append">
-            <button class="btn btn-outline-success" type="button">Add</button>
+            <button id="recipient-save-button" class="btn btn-outline-success d-none" type="button">Save</button>
+            <button id="recipient-add-button" class="btn btn-outline-secondary" type="button">Add</button>
           </div>
         </div>
         
         <br />
-        <ul class="list-group" id="course-participant-list">
-          <li class="list-group-item">
-            0x09324890901230908923423432
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span class="text-danger" aria-hidden="true">&times;</span>
-            </button>
-          </li>
-          <li class="list-group-item">
-            0x09324890901230908923423432
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span class="text-danger" aria-hidden="true">&times;</span>
-            </button>
-          </li>
-          <li class="list-group-item">
-            0x09324890901230908923423432
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span class="text-danger" aria-hidden="true">&times;</span>
-            </button>
-          </li>
-          <li class="list-group-item">
-            0x09324890901230908923423432
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span class="text-danger" aria-hidden="true">&times;</span>
-            </button>
-          </li>
-        </ul>
+        <ul class="list-group" id="course-recipient-list"></ul>
       </div>
     </div>
     <br>
     <a href="./courseList.html"><button type="button" class="btn btn-secondary float-left" id="btnAddCertificate">Cancel</button></a>
-    <a href="./certificateIssue.html?courseId=10"><button type="button" class="btn btn-success float-right" id="btnAddCertificate">Issue Certificates</button></a>
+    <a id="certificate-issue-button" href="./certificateIssue.html?courseId="><button type="button" class="btn btn-success float-right" id="btnAddCertificate">Issue Certificates</button></a>
     <div class="clearfix"></div>
   </div>
   

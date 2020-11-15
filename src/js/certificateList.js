@@ -1,22 +1,46 @@
 $( document ).ready(function() {
 
     var certificates = [
-        { certificateId = 9012398, certificateImage = 01, certificate }
+        { id : 9012398, image : "09", title : "Web Development I", issuer : "0x012312", recipient : "0x34433" },
+        { id : 9012399, image : "02", title : "Web Development II", issuer : "0x012313", recipient : "0x34434" },
+        { id : 9012400, image : "03", title : "Web Development III", issuer : "0x012314", recipient : "0x34435" },
+        { id : 9012400, image : "00", title : "Web Development III", issuer : "0x012315", recipient : "0x34436" },
+        { id : 9012400, image : "04", title : "Web Development III", issuer : "0x012316", recipient : "0x34437" }
     ]
     var parent = $('#certificates-parent');
 
-    certificates.forEach(element => {
-        parent.append(
-            '<div class="certifiate-bg-input card d-inline-block m-1" tag="' + element + '" style="width: 80px; height: 80px;">'
-            + '<img src="images/' + element + '.png" class="rounded img-fluid"  alt="...">'
-            + '</div>'
-        );
+    certificates.forEach(certificate => {
+        var certificateItem = 
+        '<a href="certificateDetail.html?certificateId=' + certificate.id + '">' +
+            '<div class="certificate-card card m-2 shadow rounded">' +
+                '<span class="certificate-card-arc small text-secondary d-none">' + certificate.title + '</span>' +
+                '<img src="./images/' + certificate.image + '.png" class="img-fluid" style="width: 180px; height: 180px;" alt="...">' +
+                '<div class="card-body">' +
+                    '<span class="certificate-card-title m-0 d-block">' + certificate.title + '</span>' +
+                    '<small class="certificate-card-issuer m-0 text-secondary d-block">From: ' + certificate.issuer + '</small>' +
+                    '<small class="certificate-card-recipient m-0 text-secondary d-block">For: ' + certificate.recipient + '</small>' +
+                '</div>'+
+            '</div>' +
+        '</a>'
+        console.log(certificate.id);
+        parent.append(certificateItem);
     });
+    
+    setTimeout(function(){ 
+        
+        $('.certificate-card > .certificate-card-arc').each(function(){
+            text = $(this).text();
+            if (text.length > 19) {
+                text = text.slice(0, 18) + "...";
+            }
+            $(this).text(text);
+            $(this).removeClass('d-none');
+            $(this).circleType(
+                { position: 'absolute', radius: 45 }
+            );
+        });
+        
+    }, 1000);
 
-    var certificateItem = '<a href="certificateDetail.html?certificateId=0">' +
-      '<div class="card m-2" style="width: 180px; height: 180px;">' +
-        '<span id="card-course-name-arc" class="position-absolute small font-weight-bold text-secondary" style="top: 40px; right: 0; left: 0px; letter-spacing: -0.2em;"></span>' +
-        '<img id="card-course-img" src="./images/00.png" class="rounded img-fluid"  alt="...">' +
-      '</div>' +
-    '</a>'
+    
 });
