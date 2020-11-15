@@ -1,0 +1,21 @@
+:root {
+    font-family: monospace;
+}
+
+
+.table tr[data-href]:hover {
+    background-color: #cccccc;
+}
+
+
+.certificates-con .card .card-body {
+    padding: 5px 20px 10px 20px;
+}
+
+.certificates-con .card img {
+    padding: 15px 20px 5px 20px;
+}
+
+.certificates-con .card span {
+    padding: 0px;
+}
