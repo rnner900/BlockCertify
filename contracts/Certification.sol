@@ -1,12 +1,13 @@
 pragma solidity 0.5.16;
+pragma experimental ABIEncoderV2;
 
 contract Certification {
 
     struct Certifate {
-        uint courseId;
         address publisher;
         address participant;
         string title;
+        uint courseId;
         string course;
     }
 
@@ -15,18 +16,17 @@ contract Certification {
         string title;
     }
 
-    mapping(uint => Certifate) public certificates; // TODO:remap to adress
+    mapping(address => Certifate[]) public certificates;
     mapping(address => Course[]) public courses;
     mapping(uint => address[]) public courseParticipants;
 
-    event logCourses(address[]);
-
-    uint public certificateCount;
     uint public courseCount;
+    address public contractAddress = msg.sender;
 
-     function addCertificate (address _collector, string memory _title, string memory _course) public {
-        certificates[certificateCount] = Certifate(certificateCount, msg.sender, _collector, _title, _course);
-        certificateCount++;
+    function addCertificate (address _collector, string memory _title, uint _courseId, string memory _courseTitle) public {
+        certificates[_collector].push(
+            Certifate(msg.sender, _collector, _title, _courseId, _courseTitle)
+        );
     }
 
     // function issueCertificates (uint _courseId, string memory _title) public {
@@ -41,13 +41,17 @@ contract Certification {
         courseCount++;
     }
 
+    function getCertificateCount (address _user) public view returns (uint count){
+        return certificates[_user].length;
+    }
+
     function addParticipant(uint _courseId, address _participant) public {
 
         require(courses[msg.sender].length > 0, "No course found!");
         
         // check if course exists
         Course[] memory myCourses = courses[msg.sender];
-        //emit logCourses(courses[msg.sender]);
+
         uint length = myCourses.length;
         bool exists = false;
 
@@ -75,6 +79,10 @@ contract Certification {
         return false;
     }
 
+    function getCourseParticipants(uint _courseId) public view returns (address[] memory){
+        return courseParticipants[_courseId];
+    }
+
 
     constructor() public {
         addCourse("Web Engineering 1"); // course id: 0
@@ -83,15 +91,15 @@ contract Certification {
         address participantA = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
         address participantB = 0xfC9a8E621F0D8821A770a5Cee4cEF8a90D387e8D;
         
-        addParticipant(0, participantA);
-        addParticipant(1, participantB);
+        addParticipant(courses[msg.sender][0].id, participantA);
+        addParticipant(courses[msg.sender][0].id, participantB);
+        addParticipant(courses[msg.sender][1].id, participantB);
 
         //issueCertificates(0, "Web Engineer");
 
-
         // test adding of certificates
-        address receiver = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
-        addCertificate(receiver, "Web Engineer", courses[msg.sender][0].title);
-        addCertificate(receiver, "Power Engineer", courses[msg.sender][1].title);
+        address receiver = 0x53bde67D3614B1f85eD12B77adA1c0Ca4e86b840;
+        addCertificate(receiver, "Web Engineer", courses[msg.sender][0].id, courses[msg.sender][0].title);
+        addCertificate(receiver, "Power Engineer", courses[msg.sender][1].id, courses[msg.sender][1].title);
     }
 }
