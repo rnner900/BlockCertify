@@ -4,13 +4,12 @@ $( document ).ready(function() {
 
     if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
-        console.log(certificateId);
 
         var course = { 
             id: courseId, 
             title: 'Web Development III', 
             issuer : '0x12399239', 
-            recipientCount : 10 
+            participantCount : 10 
         };
 
         render(course);
@@ -45,7 +44,7 @@ $( document ).ready(function() {
 
         $('.certificate-card-title').first().text("");
         $('.certificate-card-issuer').first().text("From: " + course.issuer);
-        $('.certificate-card-recipient').first().text("For: " + course.recipientCount + " different recipients");
+        $('.certificate-card-participant').first().text("For: " + course.participantCount + " different participants");
     
         $('#course-title-input').attr('placeholder', course.title);
     }
