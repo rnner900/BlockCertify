@@ -49,13 +49,7 @@ App = {
         );
     },
 
-    render: function () {
-        var loader = $('#loader');
-        var content = $('#content');
-
-        // for testing purposes
-        var contractAddress;
-
+    loadAccountData: function () {
         // Load account data
         web3.eth.getCoinbase(function (err, account) {
             if (err) console.log(err);
@@ -65,39 +59,47 @@ App = {
                 balance = App.updateBalance();
             }
         });
+    },
+
+    render: function () {
+        var loader = $('#loader');
+        var content = $('#content');
 
         // Load contract data
         App.contracts.Certification.deployed()
             .then(function (instance) {
+                window.ethereum.on('accountsChanged', function (accounts) {
+                    App.loadAccountData();
+                    App.render();
+                });
                 App.certificationInstance = instance;
-                return App.certificationInstance.contractAddress();
+                App.loadAccountData();
+                return App.certificationInstance.getIssuerCertificateCount(App.account);
             })
-            .then(function (_contractAddress) {
+            .then(function (certificateCount) {
+                console.log(certificateCount);
                 var certificatesResults = $('#certificatesResults');
                 certificatesResults.empty();
-                contractAddress = _contractAddress;
-                // console.log('contractAdress: ' + contractAddress);
-                App.certificationInstance.getCertificateCount(App.account).then(function (certificateCount) {
-                    for (let i = 0; i < certificateCount; i++) {
-                        App.certificationInstance.certificates(App.account, i).then(function (cert) {
-                            // Render certificate Result
-                            var certificateTemplate = '<tr><td>' + cert[0] + '</td><td>' + cert[1] + '</td><td>' + cert[2] + '</td><td>' + cert[3] + '</td><td>' + cert[4] + '</td></tr>';
-                            certificatesResults.append(certificateTemplate);
-                        });
-                    }
-                });
+                for (let i = 0; i < certificateCount; i++) {
+                    console.log(i);
+                    App.certificationInstance.issuerCertificates(App.account, i).then(function (cert) {
+                        // Render certificate Result
+                        var certificateTemplate = '<tr><td>' + cert[0] + '</td><td>' + cert[1] + '</td><td>' + cert[2] + '</td><td>' + cert[3] + '</td><td>' + cert[4] + '</td></tr>';
+                        certificatesResults.append(certificateTemplate);
+                    });
+                }
 
                 loader.hide();
                 content.show();
-                return App.certificationInstance.courseCount();
+                return App.certificationInstance.getIssuerCourseCount(App.account);
             })
             .then(function (courseCount) {
                 // show courses of constructors address, TODO: show users courses
                 var courseOverview = $('#courseOverview');
                 courseOverview.empty();
                 for (let i = 0; i < courseCount; i++) {
-                    App.certificationInstance.getCourseParticipants(i).then(function (participants) {
-                        App.certificationInstance.courses(contractAddress, i).then(function (course) {
+                    App.certificationInstance.issuerCourses(App.account, i).then(function (course) {
+                        App.certificationInstance.getCourseParticipants(course[0]).then(function (participants) {
                             var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><td>';
                             for (let j = 0; j < participants.length; j++) {
                                 courseTemplate += participants[j] + '<br>';
@@ -117,7 +119,7 @@ App = {
         var collector = $('#inputAddress').val();
         var title = $('#inputTitle').val();
         var course = $('#inputCourse').val();
-
+        $(':input', '#addCertificateForm').val('');
         App.contracts.Certification.deployed()
             .then(function (instance) {
                 return instance.addCertificate(collector, title, 7, course);
@@ -125,6 +127,25 @@ App = {
             .then(function (result) {
                 // Render the new balance and all contracts
                 App.render();
+                alert('Success:\nCertificate ' + title + ' of Course ' + course + ' has been given to ' + collector);
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+    },
+
+    newCourse: function () {
+        var course = $('#courseName').val();
+        $('#courseName').val('');
+        App.contracts.Certification.deployed()
+            .then(function (instance) {
+                console.log(course);
+                return instance.addCourse(course);
+            })
+            .then(function (result) {
+                // Render the new balance and all contracts
+                App.render();
+                alert('Success:\nCourse ' + course + ' was successfully created.');
             })
             .catch(function (err) {
                 console.error(err);
