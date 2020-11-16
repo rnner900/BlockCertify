@@ -1,17 +1,16 @@
+:root {
+    font-family: monospace;
+}
+
 
 .table tr[data-href]:hover {
     background-color: #cccccc;
 }
 
-
-.certificates-con .card .card-body {
-    padding: 5px 20px 10px 20px;
+.certificate-card {
+    display: inline-block;
 }
 
-.certificates-con .card img {
-    padding: 15px 20px 5px 20px;
-}
-
-.certificates-con .card span {
-    padding: 0px;
+.certificate-card > .certificate-card-arc{
+    top: 40px; right: 0; left: 0; letter-spacing: -0.1em;
 }

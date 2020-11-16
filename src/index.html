@@ -14,8 +14,8 @@
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 
@@ -28,7 +28,7 @@
       <div id="accountBalance">Your Balance: </div>
       <form id="addCertificateForm">
         <div class="form-group">
-          <label for="inputAddress">Adresse</label>
+          <label for="inputAddress">Adressee</label>
           <input type="text" class="form-control" id="inputAddress" aria-describedby="Adressee for Certificate"
             placeholder="0x01A2B23B">
           <small id="addresseHelp" class="form-text text-muted">Adress of the person you want to award with a
@@ -51,26 +51,14 @@
       <hr />
       <table border="1">
         <thead>
+          <th>Id</th>
           <th>Publisher</th>
           <th>Collector</th>
           <th>Title</th>
-          <th>Course-Id</th>
           <th>Course</th>
         </thead>
         <tbody id="certificatesResults"></tbody>
       </table>
-      <hr />
-      <form>
-        <div class="form-group">
-          <label for="courseName">Kursname</label>
-          <input type="text" class="form-control" id="courseName" aria-describedby="Name for Course"
-            placeholder="Course Name">
-          <small id="courseHelp" class="form-text text-muted">Name of the course you want to create</small>
-        </div>
-        <br>
-        <button onclick="App.newCourse();" type="button" class="btn btn-dark" id="btnAddCourse">Add
-          Course</button>
-      </form>
       <hr />
       <table border="1">
         <thead>
@@ -81,6 +69,40 @@
         <tbody id="courseOverview"></tbody>
       </table>
     </div>
+    </form>
+    <hr />
+    <table border="1">
+      <thead>
+        <th>Publisher</th>
+        <th>Collector</th>
+        <th>Title</th>
+        <th>Course-Id</th>
+        <th>Course</th>
+      </thead>
+      <tbody id="certificatesResults"></tbody>
+    </table>
+    <hr />
+    <form>
+      <div class="form-group">
+        <label for="courseName">Kursname</label>
+        <input type="text" class="form-control" id="courseName" aria-describedby="Name for Course"
+          placeholder="Course Name">
+        <small id="courseHelp" class="form-text text-muted">Name of the course you want to create</small>
+      </div>
+      <br>
+      <button onclick="App.newCourse();" type="button" class="btn btn-dark" id="btnAddCourse">Add
+        Course</button>
+    </form>
+    <hr />
+    <table border="1">
+      <thead>
+        <th>ID</th>
+        <th>Course Title</th>
+        <th>Participants</th>
+      </thead>
+      <tbody id="courseOverview"></tbody>
+    </table>
+  </div>
   </div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

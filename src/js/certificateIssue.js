@@ -1,5 +1,19 @@
 $( document ).ready(function() {
-    var parent = $('#certificate-bg-input-parent');
+    let searchParams = new URLSearchParams(window.location.search);
+    let courseId;
+
+    if (searchParams.has('courseId')) {
+        courseId = searchParams.get('courseId');
+
+        var course = { 
+            id: courseId, 
+            title: 'Web Development III', 
+            issuer : '0x12399239', 
+            participantCount : 10 
+        };
+
+        render(course);
+    }
 
     var images = [
         "00",
@@ -17,36 +31,63 @@ $( document ).ready(function() {
         "12"
     ];
 
-    images.forEach(element => {
-        parent.append(
-            '<div class="certifiate-bg-input card d-inline-block" tag="' + element + '" style="width: 80px; height: 80px;">'
-            + '<img src="images/' + element + '.png" class="rounded img-fluid"  alt="...">'
-            + '</div>'
-        );
-    });
+    renderImages(images);
+    
 
+    
+
+    function render(course) {
+        let cancelUrl = $('#cancel-button').attr('href') + courseId;
+        $('#cancel-button').attr('href', cancelUrl);
+
+        $('#certificate-headline').html("Issue Certificates for "+ course.title);
+
+        $('.certificate-card-title').first().text("");
+        $('.certificate-card-issuer').first().text("From: " + course.issuer);
+        $('.certificate-card-participant').first().text("For: " + course.participantCount + " different participants");
+    
+        $('#course-title-input').attr('placeholder', course.title);
+    }
+
+    function renderImages(images) {
+        // render images input
+        var parent = $('#certificate-image-input-parent');
+        images.forEach(imageIndex => {
+            parent.append(
+                '<div class="certifiate-image-input card d-inline-block m-1" style="width: 80px; height: 80px;">' +
+                    '<img src="images/' + imageIndex + '.png" class="rounded img-fluid"  alt="...">' +
+                '</div>'
+            );
+        }); 
+    }
+
+
+    //////// EVENTS: //////// 
     $('#certificate-title-input').on('change keydown paste input', function(){
         text = this.value;
-        console.log(text);
+        $('.certificate-card-title').first().text(text);
+
         if (text.length > 19) {
             text = text.slice(0, 18) + "...";
         }
-        $('#card-course-name-arc').text(text);
-        $('#card-course-name-arc').circleType(
-            {position: 'absolute', radius: 45}
-        );
+        $('.certificate-card > .certificate-card-arc').each(function(){
+            $(this).text(text);
+            $(this).removeClass('d-none');
+            $(this).circleType(
+                { position: 'absolute', radius: 45 }
+            );
+        });
     });
     
-    
-    $('.certifiate-bg-input').click(function() {
-        $('.certifiate-bg-input.bg-primary').removeClass("bg-primary");
+    $('.certifiate-image-input').click(function() {
+        $('.certifiate-image-input.bg-primary').removeClass("bg-primary");
 
-        var bgSrc = $(this).find('img').attr("src");
-        var bgIndex = $(this).attr('tag');
+        var imageSrc = $(this).find('img').attr("src");
+        var imageIndex = imageSrc.split('/')[1].split('.')[0];
 
-        $('#card-course-img').attr("src", bgSrc);
-        $('#certificate-bg-input').val(bgIndex);
+        $('.certificate-card-image').first().attr("src", imageSrc);
+        $('#certificate-image-input').val(imageIndex);
         
         $(this).addClass("bg-primary");
-    });  
+    }); 
 });

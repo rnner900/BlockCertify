@@ -8,52 +8,58 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/app.css">
-
+    
     <title>Issue Certificates</title>
 </head>
 <body>
     <!-- Include Header -->
     <iframe src="./header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
-
+    
     <!-- Content -->
     <div class="container">
-        <h1>Issue Certificates</h1>
-
+        <h1 id="certificate-headline">Issue Certificates for</h1>
+        
         <div class="row">
-        <div class="col-4">
-            <small>Certificate Preview</small>
-            <div class="card" style="width: 180px; height: 180px;">
-                <span id="card-course-name-arc" class="position-absolute small font-weight-bold text-secondary" style="top: 40px; right: 0; left: 0px; letter-spacing: -0.2em;"></span>
-                <img id="card-course-img" src="./images/00.png" class="rounded img-fluid"  alt="...">
+            <div class="col-4">
+                <div class="certificate-card card m-2 shadow rounded">
+                    <span class="certificate-card-arc small text-secondary d-none"></span>
+                    <img class="certificate-card-image" src="./images/00.png" class="img-fluid" style="width: 180px; height: 180px;" alt="...">
+                    <div class="card-body">
+                      <span class="certificate-card-title m-0 d-block"></span>
+                      <small class="certificate-card-issuer m-0 text-secondary d-block">From: 0x00000</small>
+                      <small class="certificate-card-participant m-0 text-secondary d-block">For: 0x00000</small>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-6">
+                <form>
+                    <div class="form-group">
+                        <label for="inputTitle">Certificate Course</label>
+                        <input id="course-title-input" type="text" class="form-control" placeholder="Course title" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTitle">Certificate Title</label>
+                        <input id="certificate-title-input" type="text" class="form-control" placeholder="Certificate Title">
+                    </div>
+                    <div class="form-group">
+                        <label>Course Certificate Image</label>
+                        <br>
+                        <input id="certificate-image-input" type="hidden" value="" />
+                        <div id="certificate-image-input-parent">
+                        </div>
+                    </div>
+                    <br>
+                </form>
             </div>
         </div>
-        <div class="col-6">
-            <form>
-                <div class="form-group">
-                    <label for="inputTitle">Certificate Course</label>
-                    <input id="course-title-input" type="text" class="form-control" placeholder="Course title" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="inputTitle">Certificate Title</label>
-                    <input id="certificate-title-input" type="text" class="form-control" placeholder="Certificate Title">
-                </div>
-                <div class="form-group">
-                    <label>Course Certificate Image</label>
-                    <br>
-                    <input id="certificate-bg-input" type="hidden" value="" />
-                    <div id="certificate-bg-input-parent">
-                    </div>
-                </div>
-                <br>
-                <button onclick="App.addCertificate();" type="button" class="btn btn-dark" id="btnAddCertificate">Issue Certificates</button>
-            </form>
-        </div>
-        </div>
+        <a id="cancel-button" href="./courseDetail.html?courseId="><button type="button" class="btn btn-secondary float-left">Cancel</button></a>
+        <a href="#"><button type="button" class="btn btn-success float-right" id="btnAddCertificate">Issue Certificates</button></a>
+        <div class="clearfix"></div>
     </div>
-
+    
     <!-- Include Footer -->
     <iframe src="./footer.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
-
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -61,6 +67,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="./js/circleType.js"></script>
     <script src="./js/jquery.lettering-0.6.1.min.js"></script>
-    <script src="./js/issueCertificates.js"></script>
+    <script src="./js/certificateIssue.js"></script>
 </body>
 </html>
