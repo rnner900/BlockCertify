@@ -51,14 +51,26 @@
       <hr />
       <table border="1">
         <thead>
-          <th>Id</th>
           <th>Publisher</th>
           <th>Collector</th>
           <th>Title</th>
+          <th>Course-Id</th>
           <th>Course</th>
         </thead>
         <tbody id="certificatesResults"></tbody>
       </table>
+      <hr />
+      <form>
+        <div class="form-group">
+          <label for="courseName">Kursname</label>
+          <input type="text" class="form-control" id="courseName" aria-describedby="Name for Course"
+            placeholder="Course Name">
+          <small id="courseHelp" class="form-text text-muted">Name of the course you want to create</small>
+        </div>
+        <br>
+        <button onclick="App.newCourse();" type="button" class="btn btn-dark" id="btnAddCourse">Add
+          Course</button>
+      </form>
       <hr />
       <table border="1">
         <thead>
@@ -69,40 +81,6 @@
         <tbody id="courseOverview"></tbody>
       </table>
     </div>
-    </form>
-    <hr />
-    <table border="1">
-      <thead>
-        <th>Publisher</th>
-        <th>Collector</th>
-        <th>Title</th>
-        <th>Course-Id</th>
-        <th>Course</th>
-      </thead>
-      <tbody id="certificatesResults"></tbody>
-    </table>
-    <hr />
-    <form>
-      <div class="form-group">
-        <label for="courseName">Kursname</label>
-        <input type="text" class="form-control" id="courseName" aria-describedby="Name for Course"
-          placeholder="Course Name">
-        <small id="courseHelp" class="form-text text-muted">Name of the course you want to create</small>
-      </div>
-      <br>
-      <button onclick="App.newCourse();" type="button" class="btn btn-dark" id="btnAddCourse">Add
-        Course</button>
-    </form>
-    <hr />
-    <table border="1">
-      <thead>
-        <th>ID</th>
-        <th>Course Title</th>
-        <th>Participants</th>
-      </thead>
-      <tbody id="courseOverview"></tbody>
-    </table>
-  </div>
   </div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
