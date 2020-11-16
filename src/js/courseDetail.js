@@ -6,7 +6,7 @@ $( document ).ready(function() {
         courseId = searchParams.get('courseId');
     }
 
-    var course = { courseId: courseId, title: 'Web Development III', issuer : '0x12399239', transaction : '0x923443122' };
+    var course = { id: courseId, title: 'Web Development III', issuer : '0x12399239', transaction : '0x923443122' };
     var participants = [
         '0x09324890901230908923423432',
         '0x09324890901230908923423433',
@@ -24,11 +24,11 @@ $( document ).ready(function() {
     renderParticipants(participants);
 
     function render(course) {
-        let certifiateIssueUrl = $('#certificate-issue-button').attr('href') + courseId;
+        let certifiateIssueUrl = $('#certificate-issue-button').attr('href') + course.id;
         console.log(certifiateIssueUrl);
         $('#certificate-issue-button').attr('href', certifiateIssueUrl);
 
-        $('#course-headline').html('Course ' + course.title);
+        $('#course-headline').html('Course ' + course.title + ' #' + course.id);
         $('#course-title-input').attr('placeholder', course.title);
         $('#course-issuer-input').attr('placeholder', course.issuer);
         $('#course-transaction-input').attr('placeholder', course.transaction);
