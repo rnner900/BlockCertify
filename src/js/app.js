@@ -13,6 +13,12 @@ App = {
          * web3.js is a javascript library that allows our client-side
          * application to talk to the blockchain. We configure web3 here.
          */
+        if (typeof web3 === 'undefined') {
+            // Metamask not installed
+            window.location.href = './login.html';
+            return;
+        }
+
         if (window.ethereum) {
             // If a web3 instance is already provided by Meta Mask.
             App.web3Provider = web3.currentProvider;
@@ -22,7 +28,9 @@ App = {
             App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
             web3 = new Web3(App.web3Provider);
         }
+
         await ethereum.enable();
+
         return App.initContract();
     },
 
@@ -32,8 +40,18 @@ App = {
             App.contracts.Certification = TruffleContract(certification);
             // Connect provider to interact with contract
             App.contracts.Certification.setProvider(App.web3Provider);
-
             return App.render();
+        });
+
+        web3.eth.getAccounts(function(err, accounts){
+            if (err != null) console.error("An error occurred: "+err);
+            else if (accounts.length == 0) {
+                // Not logged into MetaMask
+                window.location.href = './login.html';
+            } 
+            else {
+                console.log("User is logged in to MetaMask");
+            } 
         });
     },
 
@@ -115,6 +133,11 @@ App = {
             });
     },
 
+    getCertificatesByIssuer: async function (issuerAddress) {
+        instance = await App.contracts.Certification.deployed();
+        return instance.getIssuerCourseCount();
+    },
+
     addCertificate: function () {
         var collector = $('#inputAddress').val();
         var title = $('#inputTitle').val();
@@ -150,6 +173,12 @@ App = {
             .catch(function (err) {
                 console.error(err);
             });
+    },
+
+    addCourse: async function (title) {
+        var instance = await App.contracts.Certification.deployed();
+        await instance.addCourse(course);
+        alert('Success:\nCourse ' + course + ' was successfully created.');
     },
 };
 

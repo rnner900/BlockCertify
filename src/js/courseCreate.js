@@ -7,8 +7,14 @@ $( document ).ready(function() {
     });
 
     //////// EVENTS: //////// 
+    $('#submit').click(function() {
+        var title = $('#course-title-input').val();
+        App.addCourse(title);
+    });
+
     $('#participant-add-button').click(function() {
         
+        console.log("submit");
         var participant = $('#participant-add-input').val();
         newParticipants.unshift(participant);
 

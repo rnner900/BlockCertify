@@ -20,10 +20,12 @@ contract Certification {
     mapping(address => Certifate[]) public issuerCertificates;
     // map participant to Certifate to get received Certifates
     mapping(address => Certifate[]) public participantCertificates;
+
     // map issuer address to Courses to get own created Courses
     mapping(address => Course[]) public issuerCourses;
     // map participant to Courses to get Courses where the user is a participant
     mapping(address => Course[]) public participantCourses;
+    
     // map Course ID to participant address for issuer to get all participants of a course
     mapping(uint => address[]) public courseParticipants;
 
@@ -47,18 +49,6 @@ contract Certification {
         return participantCertificates[_user].length;
     }
 
-    // function issueCertificates (uint _courseId, string memory _title) public {
-    //     certificateCount++;
-    //     certificates[] = Certifate(certificateCount, _courseId, msg.sender, _title);
-    // }
-
-    function addCourse (string memory _title) public {
-        issuerCourses[msg.sender].push(
-            Course(courseCount, _title)
-        );
-        courseCount++;
-    }
-
     function getIssuerCourseCount (address _user) public view returns (uint count){
         return issuerCourses[_user].length;
     }
@@ -67,6 +57,12 @@ contract Certification {
         return participantCourses[_user].length;
     }
 
+    function addCourse (string memory _title) public {
+        issuerCourses[msg.sender].push(
+            Course(courseCount, _title)
+        );
+        courseCount++;
+    }
 
     function addParticipant(uint _courseId, address _participant) public {
 
