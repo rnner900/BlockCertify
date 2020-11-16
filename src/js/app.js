@@ -83,23 +83,21 @@ App = {
         var loader = $('#loader');
         var content = $('#content');
 
+        App.loadAccountData();
+
         // Load contract data
         App.contracts.Certification.deployed()
             .then(function (instance) {
                 window.ethereum.on('accountsChanged', function (accounts) {
-                    App.loadAccountData();
-                    App.render();
+                    location.reload();
                 });
                 App.certificationInstance = instance;
-                App.loadAccountData();
                 return App.certificationInstance.getIssuerCertificateCount(App.account);
             })
             .then(function (certificateCount) {
-                console.log(certificateCount);
                 var certificatesResults = $('#certificatesResults');
                 certificatesResults.empty();
                 for (let i = 0; i < certificateCount; i++) {
-                    console.log(i);
                     App.certificationInstance.issuerCertificates(App.account, i).then(function (cert) {
                         // Render certificate Result
                         var certificateTemplate = '<tr><td>' + cert[0] + '</td><td>' + cert[1] + '</td><td>' + cert[2] + '</td><td>' + cert[3] + '</td><td>' + cert[4] + '</td></tr>';
