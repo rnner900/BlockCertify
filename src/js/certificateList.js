@@ -1,11 +1,11 @@
 $( document ).ready(function() {
 
     var certificates = [
-        { id : 9012398, image : "09", title : "Web Development I", issuer : "0x012312", recipient : "0x34433" },
-        { id : 9012399, image : "02", title : "Web Development II", issuer : "0x012313", recipient : "0x34434" },
-        { id : 9012400, image : "03", title : "Web Development III", issuer : "0x012314", recipient : "0x34435" },
-        { id : 9012400, image : "00", title : "Web Development III", issuer : "0x012315", recipient : "0x34436" },
-        { id : 9012400, image : "04", title : "Web Development III", issuer : "0x012316", recipient : "0x34437" }
+        { id : 9012398, image : "09", title : "Web Development I", issuer : "0x012312", participant : "0x34433" },
+        { id : 9012399, image : "02", title : "Web Development II", issuer : "0x012313", participant : "0x34434" },
+        { id : 9012400, image : "03", title : "Web Development III", issuer : "0x012314", participant : "0x34435" },
+        { id : 9012400, image : "00", title : "Web Development III", issuer : "0x012315", participant : "0x34436" },
+        { id : 9012400, image : "04", title : "Web Development III", issuer : "0x012316", participant : "0x34437" }
     ]
     var parent = $('#certificates-parent');
 
@@ -18,7 +18,7 @@ $( document ).ready(function() {
                 '<div class="card-body">' +
                     '<span class="certificate-card-title m-0 d-block">' + certificate.title + '</span>' +
                     '<small class="certificate-card-issuer m-0 text-secondary d-block">From: ' + certificate.issuer + '</small>' +
-                    '<small class="certificate-card-recipient m-0 text-secondary d-block">For: ' + certificate.recipient + '</small>' +
+                    '<small class="certificate-card-participant m-0 text-secondary d-block">For: ' + certificate.participant + '</small>' +
                 '</div>'+
             '</div>' +
         '</a>'

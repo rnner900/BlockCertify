@@ -7,7 +7,7 @@ $( document ).ready(function() {
     }
 
     var course = { courseId: courseId, title: 'Web Development III', issuer : '0x12399239', transaction : '0x923443122' };
-    var recipients = [
+    var participants = [
         '0x09324890901230908923423432',
         '0x09324890901230908923423433',
         '0x09324890901230908923423434',
@@ -18,10 +18,10 @@ $( document ).ready(function() {
         '0x09324890901230908923423439',
     ];
 
-    var newRecipients = [];
+    var newParticipants = [];
 
     render(course);
-    renderRecipients(recipients);
+    renderParticipants(participants);
 
     function render(course) {
         let certifiateIssueUrl = $('#certificate-issue-button').attr('href') + courseId;
@@ -34,50 +34,50 @@ $( document ).ready(function() {
         $('#course-transaction-input').attr('placeholder', course.transaction);
     }
 
-    function renderRecipients(recipients) {
-        let parent = $('#course-recipient-list');
+    function renderParticipants(participants) {
+        let parent = $('#course-participant-list');
 
-        recipients.forEach(recipient => {
-            var recipientHtml = '<li class="list-group-item">' + recipient + '</li>';
-            parent.append(recipientHtml);
+        participants.forEach(participant => {
+            var participantHtml = '<li class="list-group-item">' + participant + '</li>';
+            parent.append(participantHtml);
         });
     }
 
     //////// EVENTS: //////// 
-    $('#recipient-add-button').click(function() {
+    $('#participant-add-button').click(function() {
         console.log("click");
-        $('#recipient-save-button').removeClass('d-none');
-        var recipient = $('#recipient-add-input').val();
-        newRecipients.unshift(recipient);
+        $('#participant-save-button').removeClass('d-none');
+        var participant = $('#participant-add-input').val();
+        newParticipants.unshift(participant);
 
-        let parent = $('#course-recipient-list');
+        let parent = $('#course-participant-list');
 
-        var recipientHtml = 
+        var participantHtml = 
         '<li class="list-group-item">' + 
-            '<span class="recipient">' + recipient + '</span>' +
-            '<button type="button" class="recipient-remove-button close" value="' + recipient +'" data-dismiss="alert" aria-label="Close">' +
+            '<span class="participant">' + participant + '</span>' +
+            '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
                 '<span aria-hidden="true">&times;</span>' +
             '</button>' +
         '</li>';
         
-        parent.prepend(recipientHtml);
+        parent.prepend(participantHtml);
     });
 
-    $('body').on('click', '.recipient-remove-button', function() {
-        var recipient = $(this).val();
+    $('body').on('click', '.participant-remove-button', function() {
+        var participant = $(this).val();
 
-        // remove recipient from list
-        const index = newRecipients.indexOf(recipient);
+        // remove participant from list
+        const index = newParticipants.indexOf(participant);
         if (index > -1) {
-            newRecipients.splice(index, 1);
+            newParticipants.splice(index, 1);
         }
 
         // remove html item
         $(this).parent().remove();
 
         // hide save button if the are no items added
-        if (newRecipients.length == 0) {
-            $('#recipient-save-button').addClass('d-none');
+        if (newParticipants.length == 0) {
+            $('#participant-save-button').addClass('d-none');
         }
     })
 });

@@ -1,37 +1,37 @@
 
 $( document ).ready(function() {
-    var newRecipients = [];
+    var newParticipants = [];
 
     $( "#course-participant-add" ).click(function() {
         alert( "Handler for .click() called." );
     });
 
     //////// EVENTS: //////// 
-    $('#recipient-add-button').click(function() {
+    $('#participant-add-button').click(function() {
         
-        var recipient = $('#recipient-add-input').val();
-        newRecipients.unshift(recipient);
+        var participant = $('#participant-add-input').val();
+        newParticipants.unshift(participant);
 
-        let parent = $('#course-recipient-list');
+        let parent = $('#course-participant-list');
 
-        var recipientHtml = 
+        var participantHtml = 
         '<li class="list-group-item">' + 
-            '<span class="recipient">' + recipient + '</span>' +
-            '<button type="button" class="recipient-remove-button close" value="' + recipient +'" data-dismiss="alert" aria-label="Close">' +
+            '<span class="participant">' + participant + '</span>' +
+            '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
                 '<span aria-hidden="true">&times;</span>' +
             '</button>' +
         '</li>';
         
-        parent.prepend(recipientHtml);
+        parent.prepend(participantHtml);
     });
 
-    $('body').on('click', '.recipient-remove-button', function() {
-        var recipient = $(this).val();
+    $('body').on('click', '.participant-remove-button', function() {
+        var participant = $(this).val();
 
-        // remove recipient from list
-        const index = newRecipients.indexOf(recipient);
+        // remove participant from list
+        const index = newParticipants.indexOf(participant);
         if (index > -1) {
-            newRecipients.splice(index, 1);
+            newParticipants.splice(index, 1);
         }
 
         // remove html item
