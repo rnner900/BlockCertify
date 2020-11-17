@@ -9,7 +9,14 @@ $( document ).ready(function() {
     //////// EVENTS: //////// 
     $('#submit').click(function() {
         var title = $('#course-title-input').val();
-        App.addCourse(title);
+        App.addCourse(title)
+            .then(function() {
+                return App.getCourseCount();
+            })
+            .then(function (courseCount) {
+                window.location.href = './courseDetail.html?courseId=' + String(courseCount-1);
+            });
+        
     });
 
     $('#participant-add-button').click(function() {

@@ -49,12 +49,29 @@ contract Certification {
         return participantCertificates[_user].length;
     }
 
-    function getIssuerCourseCount (address _user) public view returns (uint count){
-        return issuerCourses[_user].length;
+    function getIssuerCourseCount (address _issuer) public view returns (uint count){
+        return issuerCourses[_issuer].length;
+    }
+
+    function getIssuerCourseById(address _issuer, uint _courseId) public view returns (Course memory course) {
+        Course[] memory courses = issuerCourses[_issuer];
+        uint length = courses.length;
+        for (uint i = 0; i < length; i++) {
+            if (courses[i].id != _courseId) {
+                continue;
+            }
+            course = courses[i];
+            break;
+        }
+        return course;
     }
     
-    function getParticipantCourseCount(address _user) public view returns (uint count) {
-        return participantCourses[_user].length;
+    function getParticipantCourseCount(address _participant) public view returns (uint count) {
+        return participantCourses[_participant].length;
+    }
+
+    function getCourseParticipant(uint _courseId, uint _index) public view returns (address){
+        return courseParticipants[_courseId][_index];
     }
 
     function addCourse (string memory _title) public {
@@ -73,7 +90,7 @@ contract Certification {
 
         uint length = myCourses.length;
         bool exists = false;
-        Course  memory course;
+        Course memory course;
         for (uint i = 0; i < length; i++) {
             if (myCourses[i].id != _courseId) {
                 continue;
@@ -98,10 +115,6 @@ contract Certification {
             }
         }
         return false;
-    }
-
-    function getCourseParticipants(uint _courseId) public view returns (address[] memory){
-        return courseParticipants[_courseId];
     }
 
 

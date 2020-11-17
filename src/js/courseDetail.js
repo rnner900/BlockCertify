@@ -1,10 +1,14 @@
-$( document ).ready(function() {
+App.ready(function() {
     let searchParams = new URLSearchParams(window.location.search);
     let courseId = 0;
 
     if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
+        App.getIssuerCourseById(App.account, courseId).then(function (course) {
+            console.log(course);
+        });
     }
+    
 
     var course = { id: courseId, title: 'Web Development III', issuer : '0x12399239', transaction : '0x923443122' };
     var participants = [

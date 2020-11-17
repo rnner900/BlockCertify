@@ -15,7 +15,7 @@ App = {
          */
         if (typeof web3 === 'undefined') {
             // Metamask not installed
-            window.location.href = './login.html';
+            redirectToLogin();
             return;
         }
 
@@ -34,56 +34,93 @@ App = {
         return App.initContract();
     },
 
-    initContract: function () {
+    initContract: async function () {
         $.getJSON('Certification.json', function (certification) {
             // Instantiate a new truffle contract from the artifact
             App.contracts.Certification = TruffleContract(certification);
             // Connect provider to interact with contract
             App.contracts.Certification.setProvider(App.web3Provider);
-            return App.render();
-        });
+            App.account = App.getAccount();
 
-        web3.eth.getAccounts(function(err, accounts){
-            if (err != null) console.error("An error occurred: "+err);
-            else if (accounts.length == 0) {
-                // Not logged into MetaMask
-                window.location.href = './login.html';
-            } 
-            else {
-                console.log("User is logged in to MetaMask");
-            } 
+            // App.render();
         });
     },
 
-    updateBalance: function () {
-        return web3.fromWei(
-            web3.eth.getBalance(App.account, function (err, balance) {
-                if (err) console.log(err);
-                else {
-                    $('#accountBalance').html('Your Balance: ' + web3.fromWei(balance, 'ether') + ' ETH');
-                    App.balance = balance;
-                }
-            })
-        );
-    },
-
-    loadAccountData: function () {
+    getAccount: async function () {
         // Load account data
         web3.eth.getCoinbase(function (err, account) {
             if (err) console.log(err);
-            else {
-                App.account = account;
-                $('#accountAddress').html('Your Account: ' + App.account);
-                balance = App.updateBalance();
-            }
+            return account;
         });
+    },
+
+    getIssuerCertificate: function (issuerAddress) {
+        App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.addCertificate(collector, title, 7, course);
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    getIssuerCourseById: function(issuer, courseId) {
+        return App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.getIssuerCourseById(issuer, courseId);
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    getCourseCount: function () {
+        return App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.courseCount();
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    addCourse: async function (title) {
+
+        return App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.addCourse(title);
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    addCertificate: function () {
+        var collector = $('#inputAddress').val();
+        var title = $('#inputTitle').val();
+        var course = $('#inputCourse').val();
+        $(':input', '#addCertificateForm').val('');
+        App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.addCertificate(collector, title, 7, course);
+            })
+            .then(function (result) {
+                // Render the new balance and all contracts
+                App.render();
+                alert('Success:\nCertificate ' + title + ' of Course ' + course + ' has been given to ' + collector);
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
     },
 
     render: function () {
         var loader = $('#loader');
         var content = $('#content');
-
-        App.loadAccountData();
 
         // Load contract data
         App.contracts.Certification.deployed()
@@ -115,7 +152,7 @@ App = {
                 courseOverview.empty();
                 for (let i = 0; i < courseCount; i++) {
                     App.certificationInstance.issuerCourses(App.account, i).then(function (course) {
-                        App.certificationInstance.getCourseParticipants(course[0]).then(function (participants) {
+                        App.certificationInstance.getCourseParticipants(course[0], 0).then(function (participants) {
                             var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><td>';
                             for (let j = 0; j < participants.length; j++) {
                                 courseTemplate += participants[j] + '<br>';
@@ -131,28 +168,16 @@ App = {
             });
     },
 
-    getCertificatesByIssuer: async function (issuerAddress) {
-        instance = await App.contracts.Certification.deployed();
-        return instance.getIssuerCourseCount();
-    },
-
-    addCertificate: function () {
-        var collector = $('#inputAddress').val();
-        var title = $('#inputTitle').val();
-        var course = $('#inputCourse').val();
-        $(':input', '#addCertificateForm').val('');
-        App.contracts.Certification.deployed()
-            .then(function (instance) {
-                return instance.addCertificate(collector, title, 7, course);
+    updateBalance: function () {
+        return web3.fromWei(
+            web3.eth.getBalance(App.account, function (err, balance) {
+                if (err) console.log(err);
+                else {
+                    $('#accountBalance').html('Your Balance: ' + web3.fromWei(balance, 'ether') + ' ETH');
+                    App.balance = balance;
+                }
             })
-            .then(function (result) {
-                // Render the new balance and all contracts
-                App.render();
-                alert('Success:\nCertificate ' + title + ' of Course ' + course + ' has been given to ' + collector);
-            })
-            .catch(function (err) {
-                console.error(err);
-            });
+        );
     },
 
     newCourse: function () {
@@ -173,11 +198,9 @@ App = {
             });
     },
 
-    addCourse: async function (title) {
-        var instance = await App.contracts.Certification.deployed();
-        await instance.addCourse(course);
-        alert('Success:\nCourse ' + course + ' was successfully created.');
-    },
+    redirectToLogin() {
+        window.location.href = "./login.html";
+    }
 };
 
 window.addEventListener('load', function () {

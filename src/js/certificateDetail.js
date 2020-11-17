@@ -3,7 +3,7 @@ $( document ).ready(function() {
 
     if (searchParams.has('certificateId')) {
         let certificateId = searchParams.get('certificateId');
-
+        
         let certificate = { 
             id: certificateId,
             image: '05',
