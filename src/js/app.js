@@ -34,30 +34,67 @@ App = {
         return App.initContract();
     },
 
-    initContract: async function () {
+    initContract: function () {
         $.getJSON('Certification.json', function (certification) {
             // Instantiate a new truffle contract from the artifact
             App.contracts.Certification = TruffleContract(certification);
             // Connect provider to interact with contract
             App.contracts.Certification.setProvider(App.web3Provider);
-            App.account = App.getAccount();
+            App.getAccount(function(account) {
+                App.account = account;
 
-            // App.render();
+                window.ethereum.on('accountsChanged', function (accounts) {
+                    location.reload();
+                });
+
+                var evt = $.Event('onContractReady');
+                $(window).trigger(evt);
+            });
         });
     },
 
-    getAccount: async function () {
+    getAccount: function (callback) {
         // Load account data
         web3.eth.getCoinbase(function (err, account) {
             if (err) console.log(err);
-            return account;
+            callback(account);
         });
     },
 
-    getIssuerCertificate: function (issuerAddress) {
-        App.contracts.Certification.deployed()
-            .then(function (instance) {
-                return instance.addCertificate(collector, title, 7, course);
+    getIssuerCourses: function (issuerAddress) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                console.log(issuerAddress);
+                var courseCount = await instance.getIssuerCourseCount(issuerAddress);
+                var courses = [];
+
+                for (let i = 0; i < courseCount; i++) {
+                    var course = await instance.issuerCourse(issuerAddress, i);
+                    console.log(course);
+                    courses.push(course);
+                }
+
+                return courses;
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    getIssuerCertificates: function (issuerAddress) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                console.log(issuerAddress);
+                var certificateCount = await instance.getIssuerCertificateCount(issuerAddress);
+                var certificates = [];
+
+                for (let i = 0; i < certificateCount; i++) {
+                    var certificate = await instance.issuerCertificates(issuerAddress, i);
+                    certificates.push(certificate);
+                }
+
+                return certificates;
             })
             .catch(function (error) {
                 console.warn(error);
@@ -68,6 +105,8 @@ App = {
     getIssuerCourseById: function(issuer, courseId) {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
+                console.log(issuer);
+                console.log(courseId);
                 return instance.getIssuerCourseById(issuer, courseId);
             })
             .catch(function (error) {
@@ -118,56 +157,6 @@ App = {
             });
     },
 
-    render: function () {
-        var loader = $('#loader');
-        var content = $('#content');
-
-        // Load contract data
-        App.contracts.Certification.deployed()
-            .then(function (instance) {
-                window.ethereum.on('accountsChanged', function (accounts) {
-                    location.reload();
-                });
-                App.certificationInstance = instance;
-                return App.certificationInstance.getIssuerCertificateCount(App.account);
-            })
-            .then(function (certificateCount) {
-                var certificatesResults = $('#certificatesResults');
-                certificatesResults.empty();
-                for (let i = 0; i < certificateCount; i++) {
-                    App.certificationInstance.issuerCertificates(App.account, i).then(function (cert) {
-                        // Render certificate Result
-                        var certificateTemplate = '<tr><td>' + cert[0] + '</td><td>' + cert[1] + '</td><td>' + cert[2] + '</td><td>' + cert[3] + '</td><td>' + cert[4] + '</td></tr>';
-                        certificatesResults.append(certificateTemplate);
-                    });
-                }
-
-                loader.hide();
-                content.show();
-                return App.certificationInstance.getIssuerCourseCount(App.account);
-            })
-            .then(function (courseCount) {
-                // show courses of constructors address, TODO: show users courses
-                var courseOverview = $('#courseOverview');
-                courseOverview.empty();
-                for (let i = 0; i < courseCount; i++) {
-                    App.certificationInstance.issuerCourses(App.account, i).then(function (course) {
-                        App.certificationInstance.getCourseParticipants(course[0], 0).then(function (participants) {
-                            var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><td>';
-                            for (let j = 0; j < participants.length; j++) {
-                                courseTemplate += participants[j] + '<br>';
-                            }
-                            courseTemplate += '</td></tr>';
-                            courseOverview.append(courseTemplate);
-                        });
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.warn(error);
-            });
-    },
-
     updateBalance: function () {
         return web3.fromWei(
             web3.eth.getBalance(App.account, function (err, balance) {
@@ -199,7 +188,7 @@ App = {
     },
 
     redirectToLogin() {
-        window.location.href = "./login.html";
+        // window.location.href = "./login.html";
     }
 };
 

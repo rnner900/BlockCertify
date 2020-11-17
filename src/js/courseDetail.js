@@ -1,4 +1,5 @@
-App.ready(function() {
+$(window).on('onContractReady', function (e) {
+    console.log("read");
     let searchParams = new URLSearchParams(window.location.search);
     let courseId = 0;
 
