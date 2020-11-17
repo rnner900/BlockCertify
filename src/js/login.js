@@ -16,15 +16,15 @@ App = {
 
         if (typeof web3 === 'undefined') {
             // Metamask not installed
-            alert("Metamask is not installed, please install Metamask if you want to use this application.");
+            alert('Metamask is not installed, please install Metamask if you want to use this application.');
             return;
         }
 
         // check if user is logged in to Metamask
         web3.eth.getAccounts(function (err, accounts) {
             if (err != null) console.error('An error occurred: ' + err);
-            else if (accounts.length == 0) console.log("User is not logged in yet.");
-            else window.location.href = "http://localhost:3000/start.html";
+            else if (accounts.length == 0) console.log('User is not logged in yet.');
+            else window.location.href = 'http://localhost:3000/start.html';
         });
 
         if (window.ethereum) {
@@ -36,15 +36,18 @@ App = {
             App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
             web3 = new Web3(App.web3Provider);
         }
-        
 
         await ethereum.enable();
 
-        window.location.href = "http://localhost:3000/start.html";
+        window.location.href = 'http://localhost:3000/start.html';
     },
-}
-
+};
 
 window.addEventListener('load', function () {
     App.init();
+    // workaround for issue https://github.com/MetaMask/metamask-extension/issues/7221
+    if (!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+    }
 });
