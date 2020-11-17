@@ -8,16 +8,28 @@ App = {
         return App.initWeb3();
     },
 
+    redirectToLogin() {
+        window.location.href = 'http://localhost:3000';
+        return;
+    },
+
     initWeb3: async function () {
         /* Web3:
          * web3.js is a javascript library that allows our client-side
          * application to talk to the blockchain. We configure web3 here.
          */
+
         if (typeof web3 === 'undefined') {
             // Metamask not installed
-            redirectToLogin();
+            App.redirectToLogin();
             return;
         }
+
+        web3.eth.getAccounts(function (err, accounts) {
+            if (err != null) console.error('An error occurred: ' + err);
+            else if (accounts.length == 0) App.redirectToLogin();
+            else console.log('User is logged in to MetaMask');
+        });
 
         if (window.ethereum) {
             // If a web3 instance is already provided by Meta Mask.
@@ -28,6 +40,8 @@ App = {
             App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
             web3 = new Web3(App.web3Provider);
         }
+        // check if user is logged in to Metamask
+        
 
         await ethereum.enable();
 
@@ -40,7 +54,7 @@ App = {
             App.contracts.Certification = TruffleContract(certification);
             // Connect provider to interact with contract
             App.contracts.Certification.setProvider(App.web3Provider);
-            App.getAccount(function(account) {
+            App.getAccount(function (account) {
                 App.account = account;
 
                 window.ethereum.on('accountsChanged', function (accounts) {
@@ -102,7 +116,7 @@ App = {
             });
     },
 
-    getIssuerCourseById: function(issuer, courseId) {
+    getIssuerCourseById: function (issuer, courseId) {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
                 console.log(issuer);
@@ -127,7 +141,6 @@ App = {
     },
 
     addCourse: async function (title) {
-
         return App.contracts.Certification.deployed()
             .then(function (instance) {
                 return instance.addCourse(title);
@@ -187,9 +200,8 @@ App = {
             });
     },
 
-    redirectToLogin() {
-        // window.location.href = "./login.html";
-    }
+
+    
 };
 
 window.addEventListener('load', function () {
