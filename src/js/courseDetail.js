@@ -6,33 +6,22 @@ $(window).on('onContractReady', function (e) {
     if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
         App.getIssuerCourseById(App.account, courseId).then(function (course) {
-            console.log(course);
+            if (course) {
+                course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
+                render(course);
+            }
+        })
+
+        App.getCourseParticipants(courseId).then(function (participants) {
+            console.log(participants);
+            renderParticipants(participants);
         });
     }
-    
-
-    var course = { id: courseId, title: 'Web Development III', issuer : '0x12399239', transaction : '0x923443122' };
-    var participants = [
-        '0x09324890901230908923423432',
-        '0x09324890901230908923423433',
-        '0x09324890901230908923423434',
-        '0x09324890901230908923423435',
-        '0x09324890901230908923423436',
-        '0x09324890901230908923423437',
-        '0x09324890901230908923423438',
-        '0x09324890901230908923423439',
-    ];
 
     var newParticipants = [];
 
-    render(course);
-    renderParticipants(participants);
-
+    
     function render(course) {
-        let certifiateIssueUrl = $('#certificate-issue-button').attr('href') + course.id;
-        console.log(certifiateIssueUrl);
-        $('#certificate-issue-button').attr('href', certifiateIssueUrl);
-
         $('#course-headline').html('Course ' + course.title + ' #' + course.id);
         $('#course-title-input').attr('placeholder', course.title);
         $('#course-issuer-input').attr('placeholder', course.issuer);
@@ -42,16 +31,31 @@ $(window).on('onContractReady', function (e) {
     function renderParticipants(participants) {
         let parent = $('#course-participant-list');
 
-        participants.forEach(participant => {
-            var participantHtml = '<li class="list-group-item">' + participant + '</li>';
-            parent.append(participantHtml);
-        });
+        if (participants) {
+            participants.forEach(participant => {
+                var participantHtml = '<li class="list-group-item">' + participant + '</li>';
+                parent.append(participantHtml);
+            });
+        }
     }
 
     //////// EVENTS: //////// 
+    $('#submit').click(async function() {
+        try {
+            newParticipants.forEach(async function(participant) {
+                await App.addParticipant(courseId, participant);
+            });
+        }
+        catch(e) {
+            console.log(e);
+            return;
+        }
+
+        // window.location.href = './certificateIssue.html?courseId=' + courseId;
+    });
+
     $('#participant-add-button').click(function() {
         console.log("click");
-        $('#participant-save-button').removeClass('d-none');
         var participant = $('#participant-add-input').val();
         newParticipants.unshift(participant);
 
@@ -79,10 +83,5 @@ $(window).on('onContractReady', function (e) {
 
         // remove html item
         $(this).parent().remove();
-
-        // hide save button if the are no items added
-        if (newParticipants.length == 0) {
-            $('#participant-save-button').addClass('d-none');
-        }
     })
 });

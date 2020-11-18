@@ -1,5 +1,4 @@
 pragma solidity 0.5.16;
-pragma experimental ABIEncoderV2;
 
 contract Certification {
 
@@ -14,6 +13,7 @@ contract Certification {
     struct Course {
         uint id;
         string title;
+        address issuer;
     }
 
     // map issuer address to Certifate to get own created Certifates
@@ -53,37 +53,24 @@ contract Certification {
         return issuerCourses[_issuer].length;
     }
 
-    function getIssuerCourseById(address _issuer, uint _courseId) public view returns (Course memory course) {
-        Course[] memory courses = issuerCourses[_issuer];
-        uint length = courses.length;
-        for (uint i = 0; i < length; i++) {
-            if (courses[i].id != _courseId) {
-                continue;
-            }
-            course = courses[i];
-            break;
-        }
-        return course;
-    }
-    
     function getParticipantCourseCount(address _participant) public view returns (uint count) {
         return participantCourses[_participant].length;
     }
 
-    function getCourseParticipant(uint _courseId, uint _index) public view returns (address){
-        return courseParticipants[_courseId][_index];
+    function getCourseParticipantCount(uint _courseId) public view returns (uint count){
+        return courseParticipants[_courseId].length;
     }
 
     function addCourse (string memory _title) public {
         issuerCourses[msg.sender].push(
-            Course(courseCount, _title)
+            Course(courseCount, _title, msg.sender)
         );
         courseCount++;
     }
 
     function addParticipant(uint _courseId, address _participant) public {
 
-        require(issuerCourses[msg.sender].length > 0, "No course found!");
+        if(true) { revert("No course found!"); }
         
         // check if course exists
         Course[] memory myCourses = issuerCourses[msg.sender];
@@ -92,12 +79,11 @@ contract Certification {
         bool exists = false;
         Course memory course;
         for (uint i = 0; i < length; i++) {
-            if (myCourses[i].id != _courseId) {
-                continue;
+            if (myCourses[i].id == _courseId) {
+                exists = true;
+                course = myCourses[i];
+                break;
             }
-            exists = true;
-            course = myCourses[i];
-            break;
         }
 
         require(exists, "Course does not exist!");

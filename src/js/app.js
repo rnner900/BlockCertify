@@ -9,7 +9,6 @@ App = {
     },
 
     redirectToLogin() {
-        window.location.href = 'http://localhost:3000';
         return;
     },
 
@@ -24,7 +23,7 @@ App = {
             App.redirectToLogin();
             return;
         }
-
+        
         web3.eth.getAccounts(function (err, accounts) {
             if (err != null) console.error('An error occurred: ' + err);
             else if (accounts.length == 0) App.redirectToLogin();
@@ -102,6 +101,9 @@ App = {
                 console.log(issuerAddress);
                 var certificateCount = await instance.getIssuerCertificateCount(issuerAddress);
                 var certificates = [];
+                console.log(certificateCount);
+                var certificate = await instance.issuerCertificates(issuerAddress, 3);
+                console.log(certificate);
 
                 for (let i = 0; i < certificateCount; i++) {
                     var certificate = await instance.issuerCertificates(issuerAddress, i);
@@ -116,12 +118,38 @@ App = {
             });
     },
 
-    getIssuerCourseById: function (issuer, courseId) {
+    getIssuerCourseById: function (issuerAddress, courseId) {
         return App.contracts.Certification.deployed()
-            .then(function (instance) {
-                console.log(issuer);
+            .then(async function (instance) {
+                var courseCount = await instance.getIssuerCourseCount(issuerAddress);
+                for (let i = 0; i < courseCount; i++) {
+                    var course = await instance.issuerCourses(issuerAddress, i);
+                    console.log(course);
+                    if (courseId == course[0]) {
+                        return course;
+                    }
+                }
+                throw "Course does not exist";
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    getCourseParticipants: function(courseId) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                var participants = [];
                 console.log(courseId);
-                return instance.getIssuerCourseById(issuer, courseId);
+                var participantCount = await instance.getIssuerCourseCount(courseId);
+                console.log(parseInt(participantCount));
+                for (let i = 0; i < participantCount; i++) {
+                    var participant = await instance.getCourseParticipants(courseId, i);
+                    console.log(participant);
+                    participants.push(participant);
+                }
+                return participants;
             })
             .catch(function (error) {
                 console.warn(error);
@@ -133,6 +161,19 @@ App = {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
                 return instance.courseCount();
+            })
+            .catch(function (error) {
+                console.warn(error);
+                App.redirectToLogin();
+            });
+    },
+
+    addParticipant: async function(courseId, participant) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                participant = await instance.addParticipant(courseId, participant);
+                console.log(participant);
+                return participant;
             })
             .catch(function (error) {
                 console.warn(error);
