@@ -23,6 +23,8 @@ App = {
             App.redirectToLogin();
             return;
         }
+
+        web3.eth.handleRevert = true;
         
         web3.eth.getAccounts(function (err, accounts) {
             if (err != null) console.error('An error occurred: ' + err);
@@ -171,7 +173,7 @@ App = {
     addParticipant: async function(courseId, participant) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                participant = await instance.addParticipant(courseId, participant);
+                participant = await instance.addParticipant(courseId, participant, {from: App.account});
                 console.log(participant);
                 return participant;
             })
@@ -184,7 +186,7 @@ App = {
     addCourse: async function (title) {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
-                return instance.addCourse(title);
+                return instance.addCourse(title, {from: App.account});
             })
             .catch(function (error) {
                 console.warn(error);
@@ -199,7 +201,7 @@ App = {
         $(':input', '#addCertificateForm').val('');
         App.contracts.Certification.deployed()
             .then(function (instance) {
-                return instance.addCertificate(collector, title, 7, course);
+                return instance.addCertificate(collector, title, 7, course, {from: App.account});
             })
             .then(function (result) {
                 // Render the new balance and all contracts
@@ -229,7 +231,7 @@ App = {
         App.contracts.Certification.deployed()
             .then(function (instance) {
                 console.log(course);
-                return instance.addCourse(course);
+                return instance.addCourse(course, {from: App.account});
             })
             .then(function (result) {
                 // Render the new balance and all contracts

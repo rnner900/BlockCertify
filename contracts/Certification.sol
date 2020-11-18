@@ -70,7 +70,7 @@ contract Certification {
 
     function addParticipant(uint _courseId, address _participant) public {
 
-        if(true) { revert("No course found!"); }
+        require(issuerCourses[msg.sender].length > 0, "No course found!");
         
         // check if course exists
         Course[] memory myCourses = issuerCourses[msg.sender];
@@ -79,11 +79,12 @@ contract Certification {
         bool exists = false;
         Course memory course;
         for (uint i = 0; i < length; i++) {
-            if (myCourses[i].id == _courseId) {
-                exists = true;
-                course = myCourses[i];
-                break;
+            if (myCourses[i].id != _courseId) {
+                continue;
             }
+            exists = true;
+            course = myCourses[i];
+            break;
         }
 
         require(exists, "Course does not exist!");
