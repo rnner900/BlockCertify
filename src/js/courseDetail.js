@@ -41,22 +41,29 @@ $(window).on('onContractReady', function (e) {
     }
 
     //////// EVENTS: //////// 
-    $('#submit').click(async function() {
+    $('#submit').click(function() {
         try {
-            newParticipants.forEach(async function(participant) {
-                await App.addParticipant(courseId, participant);
-            });
+            console.log(newParticipants);
+
+            let requests = newParticipants.map((participant) => {
+                return new Promise((resolve) => {
+                    App.addParticipant(courseId, participant).then(() =>{
+                        resolve();
+                    });
+                });
+            })
+            
+            Promise.all(requests).then(() => window.location.href = './certificateIssue.html?courseId=' + courseId);
+
         }
         catch(e) {
             console.log(e);
             return;
         }
 
-        // window.location.href = './certificateIssue.html?courseId=' + courseId;
     });
 
     $('#participant-add-button').click(function() {
-        console.log("click");
         var participant = $('#participant-add-input').val();
         newParticipants.unshift(participant);
 

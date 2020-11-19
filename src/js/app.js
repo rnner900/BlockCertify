@@ -9,6 +9,7 @@ App = {
     },
 
     redirectToLogin() {
+        window.location.href = './index.html';
         return;
     },
 
@@ -25,7 +26,7 @@ App = {
         }
 
         web3.eth.handleRevert = true;
-        
+
         web3.eth.getAccounts(function (err, accounts) {
             if (err != null) console.error('An error occurred: ' + err);
             else if (accounts.length == 0) App.redirectToLogin();
@@ -42,7 +43,6 @@ App = {
             web3 = new Web3(App.web3Provider);
         }
         // check if user is logged in to Metamask
-        
 
         await ethereum.enable();
 
@@ -93,7 +93,6 @@ App = {
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
@@ -116,7 +115,6 @@ App = {
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
@@ -131,15 +129,14 @@ App = {
                         return course;
                     }
                 }
-                throw "Course does not exist";
+                throw 'Course does not exist';
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
-    getCourseParticipants: function(courseId) {
+    getCourseParticipants: function (courseId) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
                 var participants = [];
@@ -155,7 +152,6 @@ App = {
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
@@ -166,31 +162,28 @@ App = {
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
-    addParticipant: async function(courseId, participant) {
+    addParticipant: async function (courseId, participant) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                participant = await instance.addParticipant(courseId, participant, {from: App.account});
+                participant = await instance.addParticipant(courseId, participant, { from: App.account });
                 console.log(participant);
                 return participant;
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
     addCourse: async function (title) {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
-                return instance.addCourse(title, {from: App.account});
+                return instance.addCourse(title, { from: App.account });
             })
             .catch(function (error) {
                 console.warn(error);
-                App.redirectToLogin();
             });
     },
 
@@ -201,7 +194,7 @@ App = {
         $(':input', '#addCertificateForm').val('');
         App.contracts.Certification.deployed()
             .then(function (instance) {
-                return instance.addCertificate(collector, title, 7, course, {from: App.account});
+                return instance.addCertificate(collector, title, 7, course, { from: App.account });
             })
             .then(function (result) {
                 // Render the new balance and all contracts
@@ -214,8 +207,7 @@ App = {
     },
 
     isCourseCertificated: function (courseId) {
-        return App.contracts.Certification.deployed()
-        .then(async function (instance) {
+        return App.contracts.Certification.deployed().then(async function (instance) {
             return instance.courseCertificated(courseId);
         });
     },
@@ -238,7 +230,7 @@ App = {
         App.contracts.Certification.deployed()
             .then(function (instance) {
                 console.log(course);
-                return instance.addCourse(course, {from: App.account});
+                return instance.addCourse(course, { from: App.account });
             })
             .then(function (result) {
                 // Render the new balance and all contracts
@@ -249,9 +241,6 @@ App = {
                 console.error(err);
             });
     },
-
-
-    
 };
 
 window.addEventListener('load', function () {

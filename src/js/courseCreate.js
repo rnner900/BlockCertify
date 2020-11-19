@@ -14,6 +14,7 @@ $(window).on('onContractReady', function (e) {
             var courseCount = await App.getCourseCount();
 
             newParticipants.forEach(async function(participant) {
+                console.log(participant);
                 await App.addParticipant(courseCount-1, participant);
             });
 
@@ -26,7 +27,6 @@ $(window).on('onContractReady', function (e) {
 
     $('#participant-add-button').click(function() {
         
-        console.log("submit");
         var participant = $('#participant-add-input').val();
         newParticipants.unshift(participant);
 
