@@ -84,7 +84,7 @@ App = {
                 var courses = [];
 
                 for (let i = 0; i < courseCount; i++) {
-                    var course = await instance.issuerCourse(issuerAddress, i);
+                    var course = await instance.issuerCourses(issuerAddress, i);
                     console.log(course);
                     courses.push(course);
                 }
@@ -211,6 +211,13 @@ App = {
             .catch(function (err) {
                 console.error(err);
             });
+    },
+
+    isCourseCertificated: function (courseId) {
+        return App.contracts.Certification.deployed()
+        .then(async function (instance) {
+            return instance.courseCertificated(courseId);
+        });
     },
 
     updateBalance: function () {

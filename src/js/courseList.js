@@ -1,28 +1,33 @@
-$( document ).ready(function() {
+$(window).on('onContractReady', async function (e) {
     $(".table").on("click", "tr[role=\"button\"]", function (e) {
         window.location = $(this).data("href");
     });
 
-    var courseList = [
-        {id:10, title:'History',issuer:'0x234233', certifiated: 'true'},
-        {id:11, title:'Physics I',issuer:'0x234233', certifiated: 'true'},
-        {id:12, title:'Analysis II',issuer:'0x234233', certifiated: 'false'},
-        {id:13, title:'Media Design',issuer:'0x234233', certifiated: 'true'},
-    ];
+    try {
+        let searchParams = new URLSearchParams(window.location.search);
+        var issuerAddress = App.account;
+        if (searchParams.has('issuerAddress')) {
+            issuerAddress = searchParams.get('issuerAddress');
+        }
+        var courses = await App.getIssuerCourses(issuerAddress);
+        render(courses);
+    }
+    catch (e) {
+        console.warn(e);
+    }
 
-    render(courseList);
-
-    function render(courseList)  {
+    function render(courses)  {
         var parent = $('#course-list-parent');
         
-        courseList.forEach(course => {
-            var certificated = (course.certifiated == 'true') ? '&#10003;' : '&#10005;';
+        courses.forEach(async function (course) {
+            var isCertificated = await App.isCourseCertificated(course.id);
+            var checkmark = (course.isCertificated == 'true') ? '&#10003;' : '&#10005;';
             var courseHtml = 
-            '<tr role="button" data-href="courseDetail.html?courseId=' + course.id + '">' +
-                '<th scope="row">' + course.id + '</th>' +
-                '<td>' + course.title + '</td>' +
-                '<td>' + course.issuer + '</td>' +
-                '<td>' + certificated + '</td>' +
+            '<tr role="button" data-href="courseDetail.html?issuerAddress=' + course[2] +'&courseId=' + course[0] + '">' +
+                '<th scope="row">' + course[0] + '</th>' +
+                '<td>' + course[1] + '</td>' +
+                '<td>' + course[2] + '</td>' +
+                '<td>' + checkmark + '</td>' +
             '</tr>';
             parent.append(courseHtml);
         });

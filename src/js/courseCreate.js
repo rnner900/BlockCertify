@@ -1,5 +1,4 @@
-
-$( document ).ready(function() {
+$(window).on('onContractReady', function (e) {
     var newParticipants = [];
 
     $( "#course-participant-add" ).click(function() {

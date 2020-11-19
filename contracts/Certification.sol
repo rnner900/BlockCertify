@@ -29,16 +29,29 @@ contract Certification {
     // map Course ID to participant address for issuer to get all participants of a course
     mapping(uint => address[]) public courseParticipants;
 
+    mapping(uint => bool) public courseCertificated;
+
     uint public courseCount;
     address public contractAddress = msg.sender;
 
-    function addCertificate (address _participant, string memory _title, uint _courseId, string memory _courseTitle) public {
-        participantCertificates[_participant].push(
-            Certifate(msg.sender, _participant, _title, _courseId, _courseTitle)
-        );
-        issuerCertificates[msg.sender].push(
-            Certifate(msg.sender, _participant, _title, _courseId, _courseTitle)
-        );
+    function addCourseCertificates(string memory _title, uint _courseId, string memory _courseTitle) public {
+        require(!courseCertificated[_courseId], "Course already certified!");
+
+        address[] memory participants = courseParticipants[_courseId];
+        
+        for (uint i = 0; i < participants.length; i++) {
+            address participant = participants[i];
+            
+            participantCertificates[participant].push(
+                Certifate(msg.sender, participant, _title, _courseId, _courseTitle)
+            );
+
+            issuerCertificates[msg.sender].push(
+                Certifate(msg.sender, participant, _title, _courseId, _courseTitle)
+            );
+        }
+
+        courseCertificated[_courseId] = true;
     }
 
     function getIssuerCertificateCount (address _user) public view returns (uint count){
@@ -120,7 +133,5 @@ contract Certification {
 
         // test adding of certificates
         address receiver = 0x53bde67D3614B1f85eD12B77adA1c0Ca4e86b840;
-        addCertificate(receiver, "Web Engineer", issuerCourses[msg.sender][0].id, issuerCourses[msg.sender][0].title);
-        addCertificate(receiver, "Power Engineer", issuerCourses[msg.sender][1].id, issuerCourses[msg.sender][1].title);
     }
 }
