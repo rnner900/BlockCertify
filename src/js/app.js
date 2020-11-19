@@ -132,9 +132,15 @@ App = {
     getCourseParticipants: function (courseId) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
+                var participants = [];
                 var course = await instance.courses(courseId);
-                console.log(course);
-                return course[3];
+                var participantCount = course[3];
+                for (var i = 0; i < participantCount; i++) {
+                    var participant = await instance.getCourseParticipantAt(courseId, i);
+                    participants.push(participant);
+                }
+                console.log(participants);
+                return participants;
             })
             .catch(function (error) {
                 console.warn(error);

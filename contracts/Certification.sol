@@ -16,7 +16,7 @@ contract Certification {
         uint id;
         string title;
         address issuer;
-
+        uint participantCount;
         address[] participants;
     }
 
@@ -71,12 +71,12 @@ contract Certification {
         return participantCourses[_participant].length;
     }
 
-    function getCourseParticipantCount(uint _courseId) public view returns (uint count){
-        return courses[_courseId].participants.length;
+    function getCourseParticipantAt(uint _courseId, uint index) public view returns (address count){
+        return courses[_courseId].participants[index];
     }
 
     function addCourse (string memory _title) public {
-        courses[courseCount] = Course(courseCount, _title, msg.sender, new address[](10));
+        courses[courseCount] = Course(courseCount, _title, msg.sender, 0, new address[](0));
         issuerCourses[msg.sender].push(courseCount);
         courseCount++;
     }
@@ -89,6 +89,7 @@ contract Certification {
 
         courses[_courseId].participants.push(_participant);
         participantCourses[_participant].push(_courseId);
+        courses[_courseId].participantCount++;
     }
 
     function participantExists (uint _courseId, address _participant) private view returns (bool) {
