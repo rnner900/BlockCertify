@@ -12,35 +12,14 @@ $(window).on('onContractReady', function (e) {
             await App.addCourse(title);
 
             var courseCount = await App.getCourseCount();
-
-            newParticipants.forEach(async function(participant) {
-                console.log(participant);
-                await App.addParticipant(courseCount-1, participant);
-            });
+            
+            await submitParticipantList(courseCount-1);
 
             window.location.href = './courseDetail.html?issuerAddress=' + String(App.account) + '&courseId=' + String(courseCount-1);
         }
         catch(e) {
             console.warn(e);
         }
-    });
-
-    $('#participant-add-button').click(function() {
-        
-        var participant = $('#participant-add-input').val();
-        newParticipants.unshift(participant);
-
-        let parent = $('#course-participant-list');
-
-        var participantHtml = 
-        '<li class="list-group-item">' + 
-            '<small class="participant">' + participant + '</small>' +
-            '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
-                '<span aria-hidden="true">&times;</span>' +
-            '</button>' +
-        '</li>';
-        
-        parent.prepend(participantHtml);
     });
 
     $('body').on('click', '.participant-remove-button', function() {

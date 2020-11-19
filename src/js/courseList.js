@@ -5,22 +5,25 @@ $(window).on('onContractReady', async function (e) {
 
     try {
         let searchParams = new URLSearchParams(window.location.search);
-        var issuerAddress = App.account;
-        if (searchParams.has('issuerAddress')) {
-            issuerAddress = searchParams.get('issuerAddress');
+        var address = App.account;
+        if (searchParams.has('address')) {
+            address = searchParams.get('address');
         }
-        var courses = await App.getIssuerCourses(issuerAddress);
-        render(courses);
+        var issuerCourses = await App.getIssuerCourses(address);
+        var issuerParent = $('#issuer-course-list-parent');
+        render(issuerParent, issuerCourses);
+
+        var participantCourses = await App.getParticipantCourses(address);
+        var participantParent = $('#participant-course-list-parent');
+        render(participantParent, participantCourses);
     }
     catch (e) {
         console.warn(e);
     }
 
-    function render(courses)  {
-        var parent = $('#course-list-parent');
-        
+    function render(parent, courses)  {
         courses.forEach(async function (course) {
-            var isCertificated = await App.isCourseCertificated(course.id);
+            var isCertificated = course[3];
             var checkmark = (isCertificated == 'true') ? '&#10003;' : '&#10005;';
             var courseHtml = 
             '<tr role="button" data-href="courseDetail.html?courseId=' + course[0] + '">' +

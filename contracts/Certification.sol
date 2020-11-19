@@ -16,6 +16,8 @@ contract Certification {
         uint id;
         string title;
         address issuer;
+        bool certificated;
+
         uint participantCount;
         address[] participants;
     }
@@ -29,8 +31,6 @@ contract Certification {
     mapping(address => uint[]) public issuerCourses;
     // map participant to Courses to get Courses where the user is a participant
     mapping(address => uint[]) public participantCourses;
-
-    mapping(uint => bool) public courseCertificated;
 
     mapping(uint => Course) public courses;
 
@@ -52,7 +52,7 @@ contract Certification {
             );
         }
 
-        courseCertificated[_courseId] = true;
+        courses[_courseId].certificated = true;
     }
 
     function getIssuerCertificateCount (address _user) public view returns (uint count){
@@ -76,7 +76,7 @@ contract Certification {
     }
 
     function addCourse (string memory _title) public {
-        courses[courseCount] = Course(courseCount, _title, msg.sender, 0, new address[](0));
+        courses[courseCount] = Course(courseCount, _title, msg.sender, false, 0, new address[](0));
         issuerCourses[msg.sender].push(courseCount);
         courseCount++;
     }

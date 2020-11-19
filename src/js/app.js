@@ -97,6 +97,27 @@ App = {
             });
     },
 
+    getParticipantCourses: function (participantAddress) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                console.log(participantAddress);
+                var courseCount = await instance.getParticipantCourseCount(participantAddress);
+                var courses = [];
+
+                for (let i = 0; i < courseCount; i++) {
+                    var courseId = await instance.participantCourses(participantAddress, i);
+                    var course = await instance.courses(courseId);
+                    console.log(course);
+                    courses.push(course);
+                }
+
+                return courses;
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
+
     getIssuerCertificates: function (issuerAddress) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
@@ -134,7 +155,8 @@ App = {
             .then(async function (instance) {
                 var participants = [];
                 var course = await instance.courses(courseId);
-                var participantCount = course[3];
+                var participantCount = course[4];
+                console.log(course);
                 for (var i = 0; i < participantCount; i++) {
                     var participant = await instance.getCourseParticipantAt(courseId, i);
                     participants.push(participant);
@@ -196,12 +218,6 @@ App = {
             .catch(function (err) {
                 console.error(err);
             });
-    },
-
-    isCourseCertificated: function (courseId) {
-        return App.contracts.Certification.deployed().then(async function (instance) {
-            return instance.courseCertificated(courseId);
-        });
     },
 
     updateBalance: function () {
