@@ -1,12 +1,10 @@
 $(window).on('onContractReady', function (e) {
     let searchParams = new URLSearchParams(window.location.search);
     let courseId = 0;
-    let issuerAddress;
 
-    if (searchParams.has('issuerAddress') && searchParams.has('courseId')) {
-        issuerAddress = searchParams.get('issuerAddress');
+    if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
-        App.getIssuerCourse(issuerAddress, courseId).then(function (course) {
+        App.getCourse(courseId).then(function (course) {
             if (course) {
                 course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
                 render(course);
@@ -43,7 +41,7 @@ $(window).on('onContractReady', function (e) {
     //////// EVENTS: //////// 
     
     $('#issueCertificates-button').click(function() {
-        window.location.href = './certificateIssue.html?issuerAddress=' + issuerAddress + '&courseId=' + courseId;
+        window.location.href = './certificateIssue.html?courseId=' + courseId;
     });
 
     $('#submit').click(function() {
@@ -58,7 +56,7 @@ $(window).on('onContractReady', function (e) {
                 });
             })
             
-            Promise.all(requests).then(() => window.location.reload() );
+            Promise.all(requests);
 
         }
         catch(e) {

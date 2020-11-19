@@ -1,4 +1,5 @@
 pragma solidity 0.5.16;
+pragma experimental ABIEncoderV2;
 
 contract Certification {
 
@@ -15,6 +16,8 @@ contract Certification {
         uint id;
         string title;
         address issuer;
+
+        address[] participants;
     }
 
     // map issuer address to Certifate to get own created Certifates
@@ -23,21 +26,20 @@ contract Certification {
     mapping(address => Certifate[]) public participantCertificates;
 
     // map issuer address to Courses to get own created Courses
-    mapping(address => Course[]) public issuerCourses;
+    mapping(address => uint[]) public issuerCourses;
     // map participant to Courses to get Courses where the user is a participant
-    mapping(address => Course[]) public participantCourses;
-    
-    // map Course ID to participant address for issuer to get all participants of a course
-    mapping(uint => address[]) public courseParticipants;
+    mapping(address => uint[]) public participantCourses;
 
     mapping(uint => bool) public courseCertificated;
+
+    mapping(uint => Course) public courses;
 
     uint public courseCount;
     address public contractAddress = msg.sender;
 
     function addCourseCertificates(string memory _title, uint _courseId, string memory _courseTitle, string memory _imageId) public {
-        address[] memory participants = courseParticipants[_courseId];
-        
+        address[] memory participants = courses[_courseId].participants;
+    
         for (uint i = 0; i < participants.length; i++) {
             address participant = participants[i];
             
@@ -70,44 +72,27 @@ contract Certification {
     }
 
     function getCourseParticipantCount(uint _courseId) public view returns (uint count){
-        return courseParticipants[_courseId].length;
+        return courses[_courseId].participants.length;
     }
 
     function addCourse (string memory _title) public {
-        issuerCourses[msg.sender].push(
-            Course(courseCount, _title, msg.sender)
-        );
+        courses[courseCount] = Course(courseCount, _title, msg.sender, new address[](10));
+        issuerCourses[msg.sender].push(courseCount);
         courseCount++;
     }
 
     function addParticipant(uint _courseId, address _participant) public {
 
         require(issuerCourses[msg.sender].length > 0, "No course found!");
-        
-        // check if course exists
-        Course[] memory myCourses = issuerCourses[msg.sender];
-
-        uint length = myCourses.length;
-        bool exists = false;
-        Course memory course;
-        for (uint i = 0; i < length; i++) {
-            if (myCourses[i].id != _courseId) {
-                continue;
-            }
-            exists = true;
-            course = myCourses[i];
-            break;
-        }
-
-        require(exists, "Course does not exist!");
+        require(courses[_courseId].issuer == msg.sender, "You are not owner of this course!");
         require(!participantExists(_courseId, _participant), "Participant already in course!");
 
-        courseParticipants[_courseId].push(_participant);
-        participantCourses[_participant].push(course);
+        courses[_courseId].participants.push(_participant);
+        participantCourses[_participant].push(_courseId);
     }
 
     function participantExists (uint _courseId, address _participant) private view returns (bool) {
-        address[] memory participants = courseParticipants[_courseId];
+        address[] memory participants = courses[_courseId].participants;
         for (uint i; i < participants.length; i++) {
             if (participants[i]==_participant) {
                 return true;
@@ -124,9 +109,9 @@ contract Certification {
         address participantA = 0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF;
         address participantB = 0xfC9a8E621F0D8821A770a5Cee4cEF8a90D387e8D;
         
-        addParticipant(issuerCourses[msg.sender][0].id, participantA);
-        addParticipant(issuerCourses[msg.sender][0].id, participantB);
-        addParticipant(issuerCourses[msg.sender][1].id, participantB);
+        addParticipant(0, participantA);
+        addParticipant(0, participantB);
+        addParticipant(1, participantB);
 
         //issueCertificates(0, "Web Engineer");
 

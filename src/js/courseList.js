@@ -21,9 +21,9 @@ $(window).on('onContractReady', async function (e) {
         
         courses.forEach(async function (course) {
             var isCertificated = await App.isCourseCertificated(course.id);
-            var checkmark = (course.isCertificated == 'true') ? '&#10003;' : '&#10005;';
+            var checkmark = (isCertificated == 'true') ? '&#10003;' : '&#10005;';
             var courseHtml = 
-            '<tr role="button" data-href="courseDetail.html?issuerAddress=' + course[2] +'&courseId=' + course[0] + '">' +
+            '<tr role="button" data-href="courseDetail.html?courseId=' + course[0] + '">' +
                 '<th scope="row">' + course[0] + '</th>' +
                 '<td>' + course[1] + '</td>' +
                 '<td>' + course[2] + '</td>' +

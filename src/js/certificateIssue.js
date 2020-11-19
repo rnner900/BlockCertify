@@ -2,11 +2,10 @@ $(window).on('onContractReady', function (e) {
     let searchParams = new URLSearchParams(window.location.search);
     let courseId;
 
-    if (searchParams.has('issuerAddress') && searchParams.has('courseId')) {
-        issuerAddress = searchParams.get('issuerAddress');
+    if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
 
-        App.getIssuerCourse(issuerAddress, courseId).then(function (course) {
+        App.getCourse(courseId).then(function (course) {
             if (course) {
                 course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
                 render(course);

@@ -84,7 +84,8 @@ App = {
                 var courses = [];
 
                 for (let i = 0; i < courseCount; i++) {
-                    var course = await instance.issuerCourses(issuerAddress, i);
+                    var courseId = await instance.issuerCourses(issuerAddress, i);
+                    var course = await instance.courses(courseId);
                     console.log(course);
                     courses.push(course);
                 }
@@ -118,18 +119,10 @@ App = {
             });
     },
 
-    getIssuerCourse: function (issuerAddress, courseId) {
+    getCourse: function (courseId) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                var courseCount = await instance.getIssuerCourseCount(issuerAddress);
-                for (let i = 0; i < courseCount; i++) {
-                    var course = await instance.issuerCourses(issuerAddress, i);
-                    console.log(course);
-                    if (courseId == course[0]) {
-                        return course;
-                    }
-                }
-                throw 'Course does not exist';
+                return await instance.courses(courseId);
             })
             .catch(function (error) {
                 console.warn(error);
@@ -139,16 +132,9 @@ App = {
     getCourseParticipants: function (courseId) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                var participants = [];
-                console.log(courseId);
-                var participantCount = await instance.getCourseParticipantCount(courseId);
-                console.log(parseInt(participantCount));
-                for (let i = 0; i < participantCount; i++) {
-                    var participant = await instance.courseParticipants(courseId, i);
-                    console.log(participant);
-                    participants.push(participant);
-                }
-                return participants;
+                var course = await instance.courses(courseId);
+                console.log(course);
+                return course[3];
             })
             .catch(function (error) {
                 console.warn(error);
