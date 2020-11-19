@@ -7,16 +7,22 @@ $( document ).ready(function() {
     });
 
     //////// EVENTS: //////// 
-    $('#submit').click(function() {
+    $('#submit').click(async function() {
         var title = $('#course-title-input').val();
-        App.addCourse(title)
-            .then(function() {
-                return App.getCourseCount();
-            })
-            .then(function (courseCount) {
-                window.location.href = './courseDetail.html?courseId=' + String(courseCount-1);
+        try {
+            await App.addCourse(title);
+
+            var courseCount = await App.getCourseCount();
+
+            newParticipants.forEach(async function(participant) {
+                await App.addParticipant(courseCount-1, participant);
             });
-        
+
+            window.location.href = './courseDetail.html?issuerAddress=' + String(App.account) + '&courseId=' + String(courseCount-1);
+        }
+        catch(e) {
+            console.warn(e);
+        }
     });
 
     $('#participant-add-button').click(function() {
@@ -29,7 +35,7 @@ $( document ).ready(function() {
 
         var participantHtml = 
         '<li class="list-group-item">' + 
-            '<span class="participant">' + participant + '</span>' +
+            '<small class="participant">' + participant + '</small>' +
             '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
                 '<span aria-hidden="true">&times;</span>' +
             '</button>' +

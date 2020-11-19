@@ -2,10 +2,12 @@ $(window).on('onContractReady', function (e) {
     console.log("read");
     let searchParams = new URLSearchParams(window.location.search);
     let courseId = 0;
+    let issuerAddress;
 
-    if (searchParams.has('courseId')) {
+    if (searchParams.has('issuerAddress') && searchParams.has('courseId')) {
+        issuerAddress = searchParams.get('issuerAddress');
         courseId = searchParams.get('courseId');
-        App.getIssuerCourseById(App.account, courseId).then(function (course) {
+        App.getIssuerCourse(App.account, courseId).then(function (course) {
             if (course) {
                 course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
                 render(course);
@@ -33,7 +35,7 @@ $(window).on('onContractReady', function (e) {
 
         if (participants) {
             participants.forEach(participant => {
-                var participantHtml = '<li class="list-group-item">' + participant + '</li>';
+                var participantHtml = '<li class="list-group-item"><small>' + participant + '</small></li>';
                 parent.append(participantHtml);
             });
         }
@@ -63,7 +65,7 @@ $(window).on('onContractReady', function (e) {
 
         var participantHtml = 
         '<li class="list-group-item">' + 
-            '<span class="participant">' + participant + '</span>' +
+            '<small class="participant">' + participant + '</small>' +
             '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
                 '<span aria-hidden="true">&times;</span>' +
             '</button>' +

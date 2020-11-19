@@ -120,7 +120,7 @@ App = {
             });
     },
 
-    getIssuerCourseById: function (issuerAddress, courseId) {
+    getIssuerCourse: function (issuerAddress, courseId) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
                 var courseCount = await instance.getIssuerCourseCount(issuerAddress);
@@ -144,10 +144,10 @@ App = {
             .then(async function (instance) {
                 var participants = [];
                 console.log(courseId);
-                var participantCount = await instance.getIssuerCourseCount(courseId);
+                var participantCount = await instance.getCourseParticipantCount(courseId);
                 console.log(parseInt(participantCount));
                 for (let i = 0; i < participantCount; i++) {
-                    var participant = await instance.getCourseParticipants(courseId, i);
+                    var participant = await instance.courseParticipants(courseId, i);
                     console.log(participant);
                     participants.push(participant);
                 }
