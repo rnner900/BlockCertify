@@ -1,18 +1,21 @@
-$( document ).ready(function() {
+$(window).on('onContractReady', function (e) {
     let searchParams = new URLSearchParams(window.location.search);
     let courseId;
 
-    if (searchParams.has('courseId')) {
+    if (searchParams.has('issuerAddress') && searchParams.has('courseId')) {
+        issuerAddress = searchParams.get('issuerAddress');
         courseId = searchParams.get('courseId');
 
-        var course = { 
-            id: courseId, 
-            title: 'Web Development III', 
-            issuer : '0x12399239', 
-            participantCount : 10 
-        };
+        App.getIssuerCourse(issuerAddress, courseId).then(function (course) {
+            if (course) {
+                course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
+                render(course);
+            }
+        })
 
-        render(course);
+        App.getCourseParticipants(courseId).then(function (participants) {
+            renderParticipants(participants);
+        });
     }
 
     var images = [
@@ -34,19 +37,29 @@ $( document ).ready(function() {
     renderImages(images);
     
 
-    
-
     function render(course) {
-        let cancelUrl = $('#cancel-button').attr('href') + courseId;
+        let cancelUrl = $('#cancel-button').attr('href') + course.id;
         $('#cancel-button').attr('href', cancelUrl);
 
         $('#certificate-headline').html("Issue Certificates for "+ course.title);
 
         $('.certificate-card-title').first().text("");
         $('.certificate-card-issuer').first().text("From: " + course.issuer);
-        $('.certificate-card-participant').first().text("For: " + course.participantCount + " different participants");
     
         $('#course-title-input').attr('placeholder', course.title);
+    }
+
+    function renderParticipants(participants) {
+        let parent = $('#course-participant-list');
+
+        if (participants) {
+            $('.certificate-card-participant').first().text("For: " + participants.length + " different participants");
+
+            participants.forEach(participant => {
+                var participantHtml = '<li class="list-group-item"><small>' + participant + '</small></li>';
+                parent.append(participantHtml);
+            });
+        }
     }
 
     function renderImages(images) {

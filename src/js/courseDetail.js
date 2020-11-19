@@ -41,6 +41,11 @@ $(window).on('onContractReady', function (e) {
     }
 
     //////// EVENTS: //////// 
+    
+    $('#issueCertificates-button').click(function() {
+        window.location.href = './certificateIssue.html?issuerAddress=' + issuerAddress + '&courseId=' + courseId;
+    });
+
     $('#submit').click(function() {
         try {
             console.log(newParticipants);
@@ -53,7 +58,7 @@ $(window).on('onContractReady', function (e) {
                 });
             })
             
-            Promise.all(requests).then(() => window.location.href = './certificateIssue.html?courseId=' + courseId);
+            Promise.all(requests).then(() => window.location.reload() );
 
         }
         catch(e) {
@@ -66,6 +71,8 @@ $(window).on('onContractReady', function (e) {
     $('#participant-add-button').click(function() {
         var participant = $('#participant-add-input').val();
         newParticipants.unshift(participant);
+
+        $('#participant-add-input').val("");
 
         let parent = $('#course-participant-list');
 

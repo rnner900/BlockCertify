@@ -8,6 +8,7 @@ contract Certification {
         string title;
         uint courseId;
         string course;
+        string imageId;
     }
 
     struct Course {
@@ -34,20 +35,18 @@ contract Certification {
     uint public courseCount;
     address public contractAddress = msg.sender;
 
-    function addCourseCertificates(string memory _title, uint _courseId, string memory _courseTitle) public {
-        require(!courseCertificated[_courseId], "Course already certified!");
-
+    function addCourseCertificates(string memory _title, uint _courseId, string memory _courseTitle, string memory _imageId) public {
         address[] memory participants = courseParticipants[_courseId];
         
         for (uint i = 0; i < participants.length; i++) {
             address participant = participants[i];
             
             participantCertificates[participant].push(
-                Certifate(msg.sender, participant, _title, _courseId, _courseTitle)
+                Certifate(msg.sender, participant, _title, _courseId, _courseTitle, _imageId)
             );
 
             issuerCertificates[msg.sender].push(
-                Certifate(msg.sender, participant, _title, _courseId, _courseTitle)
+                Certifate(msg.sender, participant, _title, _courseId, _courseTitle, _imageId)
             );
         }
 
