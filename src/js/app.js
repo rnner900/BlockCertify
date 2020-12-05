@@ -179,12 +179,20 @@ App = {
             });
     },
 
-    addParticipant: async function (courseId, participant) {
+    addCourseParticipants: async function (courseId, participants) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                participant = await instance.addParticipant(courseId, participant, { from: App.account });
-                console.log(participant);
-                return participant;
+                return instance.addCourseParticipants(courseId, participants, { from: App.account });
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
+
+    removeCourseParticipants: async function (courseId, participants) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                return instance.removeCourseParticipants(courseId, participants, { from: App.account });
             })
             .catch(function (error) {
                 console.warn(error);

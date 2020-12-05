@@ -24,17 +24,6 @@ $(window).on('onContractReady', function (e) {
         $('#course-transaction-input').attr('placeholder', course.transaction);
     }
 
-    function renderParticipants(participants) {
-        let parent = $('#course-participant-list');
-
-        if (participants) {
-            participants.forEach(participant => {
-                var participantHtml = '<li class="list-group-item"><small>' + participant + '</small></li>';
-                parent.append(participantHtml);
-            });
-        }
-    }
-
     //////// EVENTS: //////// 
     
     $('#participant-save-button').click(function() {

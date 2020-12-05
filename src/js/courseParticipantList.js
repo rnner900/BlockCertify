@@ -1,19 +1,17 @@
 
 var newParticipants = [];
+var removeParticipants = [];
 
 async function submitParticipantList(courseId) {
     try {
-        console.log(newParticipants);
-
-        let requests = newParticipants.map((participant) => {
-            return new Promise((resolve) => {
-                App.addParticipant(courseId, participant).then(() =>{
-                    resolve();
-                });
-            });
-        })
-        
-        return Promise.all(requests);
+        if (newParticipants.length > 0) {
+            console.log(newParticipants);
+            await App.addCourseParticipants(courseId, newParticipants);
+        }
+        if (removeParticipants.length > 0) {
+            console.log(removeParticipants);
+            await App.removeCourseParticipants(courseId, removeParticipants);
+        }
     }
     catch(e) {
         console.log(e);
@@ -21,13 +19,39 @@ async function submitParticipantList(courseId) {
     }
 }
 
+function renderParticipants(participants) {
+    let parent = $('#course-participant-list');
+
+    if (participants) {
+        participants.forEach(participant => {
+            var participantHtml = 
+            '<li class="list-group-item">' +
+                '<small>' + participant + '</small>' +
+                '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+            '</li>';
+            parent.append(participantHtml);
+        });
+    }
+}
+
 $('#participant-add-button').click(function() {
     var participant = $('#participant-add-input').val();
-    newParticipants.unshift(participant);
 
     $('#participant-add-input').val("");
 
     let parent = $('#course-participant-list');
+
+    const index = removeParticipants.indexOf(participant);
+    if (index > -1) {
+        // remove participant from remove list
+        removeParticipants.splice(index, 1);
+    }
+    else {
+        // add participant to list
+        newParticipants.push(participant);
+    }
 
     var participantHtml = 
     '<li class="list-group-item">' + 
@@ -47,6 +71,9 @@ $('body').on('click', '.participant-remove-button', function() {
     const index = newParticipants.indexOf(participant);
     if (index > -1) {
         newParticipants.splice(index, 1);
+    }
+    else {
+        removeParticipants.push(participant);
     }
 
     // remove html item
