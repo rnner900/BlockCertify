@@ -23,9 +23,19 @@
         </a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" id="search-input-value" type="search" placeholder="Search address" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="searchForAddress()">Search</button>
+
+    <form class="form-inline mr-5" action="search.html" method="get">
+      <input class="form-control mr-sm-2" id="search-input-value" type="search" name="query" placeholder="Search address" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
+
+    <ul class="list-group mr-1" id="account-info">
+      <li class="list-group-item text-secondary border-bottom-0" id="account-address">Addr.: </li>
+      <li class="list-group-item text-secondary border-top-0"  id="account-balance">Bal.: </li>
+  </ul>
+    
+    
+
+    
   </div>
 </nav>

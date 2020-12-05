@@ -70,10 +70,22 @@ App = {
 
     getAccount: function (callback) {
         // Load account data
-        web3.eth.getCoinbase(function (err, account) {
+        web3.eth.getCoinbase(async function (err, account) {
             if (err) console.log(err);
+
+            $('#account-address').text("Addr.: " + account);
+
+                web3.eth.getBalance(account, function (err, balance) {
+                    if (err) console.log(err);
+                    else {
+                        $('#account-balance').text("Bal.: " + web3.utils.fromWei(balance, 'ether') + ' ETH');
+                    }
+                });
+
             callback(account);
         });
+
+        
     },
 
     getIssuerCourses: function (issuerAddress) {
@@ -274,7 +286,19 @@ App = {
             });
     },
 
-    updateBalance: function () {
+    updateAccountAddress: function () {
+        return web3.fromWei(
+            web3.eth.getBalance(App.account, function (err, balance) {
+                if (err) console.log(err);
+                else {
+                    $('#accountBalance').html('Your Balance: ' + web3.fromWei(balance, 'ether') + ' ETH');
+                    App.balance = balance;
+                }
+            })
+        );
+    },
+
+    updateAccountBalance: function () {
         return web3.fromWei(
             web3.eth.getBalance(App.account, function (err, balance) {
                 if (err) console.log(err);

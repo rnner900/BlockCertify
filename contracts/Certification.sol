@@ -164,14 +164,13 @@ contract Certification {
     address[] participants;
 
     constructor() public {
-        addCourse("Web Engineering 1"); // course id: 0
-        addCourse("Power Engineering 1"); // course id: 1
-        
-        // manually change owner of first course for testing if owner is correct
-        address mockIssuer = 0xededB61b4efE88a65221109ddF44C85cdE0B89ee;
-        courses[0].issuer = mockIssuer;
 
-        // addCourseParticipants(0, participants);
-        // addCourseParticipants(1, participants);
+        // manually add a mocking course with a mocked issuer address for testing the contract
+        address mockIssuer = 0xededB61b4efE88a65221109ddF44C85cdE0B89ee;
+        courses[courseCount] = Course(courseCount, "Web Engineering 1", mockIssuer, false, 0, new address[](0));
+        issuerCourses[mockIssuer].push(courseCount);
+        courseCount++;
+
+        addCourse("Power Engineering 1"); // course id: 1
     }
 }

@@ -1,13 +1,11 @@
 $(window).on('onContractReady', async function (e) {
 
     var issuerCertificates = await App.getIssuerCertificates(App.account);
-    var issuerParent = $('#certificates-issuer-parent');
-
+    var issuerParent = $('#issuer-certificates-parent');
     renderCertificates(issuerCertificates, issuerParent, 'issuer');
 
     var participantCertificates = await App.getParticipantCertificates(App.account);
-    var participantParent = $('#certificates-participant-parent');
-
+    var participantParent = $('#participant-certificates-parent');
     renderCertificates(participantCertificates, participantParent, 'participant');
 
     function renderCertificates(certificates, parent, queryType) {
@@ -15,45 +13,20 @@ $(window).on('onContractReady', async function (e) {
         let i = 0;
         certificates.forEach(certificate => {
 
-            var query = '';
+            var href = 'certificateDetail.html?';
             if (queryType == 'issuer') {
-                query = 'issuerAddress=' + certificate.issuer + '&index=' + i;
+                href += 'issuerAddress=' + certificate.issuer + '&index=' + i;
             }
             else if (queryType == 'participant') {
-                query = 'participantAddress=' + certificate.participant + '&index=' + i;
+                href += 'participantAddress=' + certificate.participant + '&index=' + i;
             }
 
-            var certificateItem = 
-            '<a href="certificateDetail.html?' + query + '">' +
-                '<div class="certificate-card card m-2 shadow rounded">' +
-                    '<span class="certificate-card-arc small text-secondary d-none">' + certificate.title + '</span>' +
-                    '<img src="./images/' + certificate.imageId + '.png" class="img-fluid" alt="...">' +
-                    '<div class="card-body">' +
-                        '<span class="certificate-card-title m-0 d-block">' + certificate.title + '</span>' +
-                        '<small class="certificate-card-issuer m-0 text-secondary d-block">From: ' + certificate.issuer + '</small>' +
-                        '<small class="certificate-card-participant m-0 text-secondary d-block">For: ' + certificate.participant + '</small>' +
-                    '</div>'+
-                '</div>' +
-            '</a>'
+            var certificateItem = newCertificateItem(href, certificate);
             parent.append(certificateItem);
             i++;
         });
         
-        setTimeout(function(){ 
-            
-            $('.certificate-card > .certificate-card-arc').each(function(){
-                text = $(this).text();
-                if (text.length > 19) {
-                    text = text.slice(0, 18) + "...";
-                }
-                $(this).text(text);
-                $(this).removeClass('d-none');
-                $(this).circleType(
-                    { position: 'absolute', radius: 45 }
-                );
-            });
-            
-        }, 1000);
+        applyCircleTypeWithDelay();
     }
 
 });

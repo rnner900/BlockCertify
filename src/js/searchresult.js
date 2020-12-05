@@ -25,18 +25,26 @@ $(window).on('onContractReady', function (e) {
 });
 
 async function gatherInformation(address) {
-    renderTables($('#search-results'));
-
     var issuerCourses = await App.getIssuerCourses(address);
-    render($('#issuer-course-list-parent'), issuerCourses);
+    $('#headingIssuerCourses').find("button").append(' (' + issuerCourses.length + ')')
+    var issuerCoursesParent = $('#issuer-course-list-parent');
+    render(issuerCoursesParent, issuerCourses);
 
     var participantCourses = await App.getParticipantCourses(address);
-    render($('#participant-course-list-parent'), participantCourses);
-}
+    $('#headingParticipantCourses').find("button").append(' (' + participantCourses.length + ')')
+    var participantCoursesParent = $('#participant-course-list-parent');
+    render(participantCoursesParent, participantCourses);
+    
 
-function renderTables(parent) {
-    parent.append('<h3>Issued Courses</h1> <br><table class="table"> <thead> <tr> <th scope="col">#</th> <th scope="col">Course Title</th> <th scope="col">Course Owner</th> <th scope="col">Certificated</th> </tr> </thead> <tbody id="issuer-course-list-parent">');
-    parent.append('<h3>Own Courses</h1><table class="table"> <thead> <tr> <th scope="col">#</th> <th scope="col">Course Title</th> <th scope="col">Course Owner</th> <th scope="col">Certificated</th> </tr> </thead> <tbody id="participant-course-list-parent">');
+    var issuerCertificates = await App.getIssuerCertificates(App.account);
+    $('#headingIssuerCertificates').find("button").append(' (' + issuerCertificates.length + ')')
+    var issuerParent = $('#issuer-certificates-parent');
+    renderCertificates(issuerCertificates, issuerParent, 'issuer');
+
+    var participantCertificates = await App.getParticipantCertificates(App.account);
+    $('#headingParticipantCertificates').find("button").append(' (' + participantCertificates.length + ')')
+    var participantParent = $('#participant-certificates-parent');
+    renderCertificates(participantCertificates, participantParent, 'participant');
 }
 
 function render(parent, courses)  {
@@ -53,4 +61,26 @@ function render(parent, courses)  {
         '</tr>';
         parent.append(courseHtml);
     });
+    
+}
+
+function renderCertificates(certificates, parent, queryType) {
+
+    let i = 0;
+    certificates.forEach(certificate => {
+
+        var href = 'certificateDetail.html?';
+        if (queryType == 'issuer') {
+            href += 'issuerAddress=' + certificate.issuer + '&index=' + i;
+        }
+        else if (queryType == 'participant') {
+            href += 'participantAddress=' + certificate.participant + '&index=' + i;
+        }
+
+        var certificateItem = newCertificateItem(href, certificate);
+        parent.append(certificateItem);
+        i++;
+    });
+    
+    applyCircleTypeWithDelay();
 }

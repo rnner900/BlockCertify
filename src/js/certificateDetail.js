@@ -35,21 +35,9 @@ $(window).on('onContractReady', async function (e) {
 
     function render(certificate) {
 
-        setTimeout(function(){ 
-            
-            $('.certificate-card > .certificate-card-arc').each(function(){
-                text = certificate.title;
-                if (text.length > 19) {
-                    text = text.slice(0, 18) + "...";
-                }
-                $(this).text(text);
-                $(this).removeClass('d-none');
-                $(this).circleType(
-                    { position: 'absolute', radius: 45 }
-                );
-            });
-            
-        }, 1000);
+        const certificateItem = newCertificateItem(window.location.href, certificate);
+        $("#certificate-item-parent").append(certificateItem);
+        applyCircleTypeWithDelay();
         
        
         $('#certificate-headline').html("Certificate " + certificate.title);
