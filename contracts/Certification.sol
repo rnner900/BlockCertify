@@ -146,6 +146,7 @@ contract Certification {
                 courses[_courseId].participants[i] = _participants[numberOfParticipants - 1];
                 delete courses[_courseId].participants[numberOfParticipants - 1];
                 courses[_courseId].participants.length--;
+                courses[_courseId].participantCount--;
                 break;
             }
         }
