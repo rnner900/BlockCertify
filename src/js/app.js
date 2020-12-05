@@ -302,7 +302,7 @@ App = {
             .catch(function (err) {
                 console.error(err);
             });
-    },
+    }
 };
 
 window.addEventListener('load', function () {
