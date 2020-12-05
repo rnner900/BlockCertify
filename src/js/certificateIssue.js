@@ -64,7 +64,7 @@ $(window).on('onContractReady', function (e) {
                 var participantHtml = 
                 '<li class="list-group-item">' +
                     '<input checked class="issue-participant-checkbox" type="checkbox" id="checkbox' + c + '" value="' + participant + '"/> ' +
-                    '<label for="checkbox' + c + '"> ' + participant + '</label>' + 
+                    '<label class="checkbox-label" for="checkbox' + c + '"> ' + participant + '</label>' + 
                 '</li>';
                 parent.append(participantHtml);
                 c++;

@@ -40,14 +40,31 @@
     line-height: 1.15;
 }
 
-#course-participant-list > .list-group-item input {
+/* Checkbox for certificate issue page */
+#course-participant-list > .list-group-item .issue-participant-checkbox {
     position: absolute;
     margin-top: 4px;
 }
 
-#course-participant-list > .list-group-item label {
+
+#course-participant-list > .list-group-item .checkbox-label {
     width: 100%;
     padding-left: 20px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0 !important;
+}
+
+
+#course-participant-list .participant-remove-button {
+    position: absolute;
+    right: 10px;
+}
+
+#course-participant-list .participant-item {
+    width: 100%;
+    padding-right: 15px;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;

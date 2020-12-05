@@ -25,13 +25,17 @@ function renderParticipants(participants, issuer) {
 
     if (participants) {
         participants.forEach(participant => {
-            var participantHtml = '<li class="list-group-item">' + participant;
-            if(issuer.toUpperCase() == App.account.toUpperCase()){
-                participantHtml += '<button type="button" class="participant-remove-button close" value="' + 
-                participant +'" data-dismiss="alert" aria-label="Close">' +
-                '<span aria-hidden="true">&times;</span>' + '</button>';
-            }
-            participantHtml += '</li>';
+
+            var buttonClass = (issuer.toUpperCase() == App.account.toUpperCase()) ? '' : 'd-none';
+
+            var participantHtml = 
+            '<li class="list-group-item">' + 
+                '<span class="participant-item">' + participant + '</span>' +
+                '<button type="button" class="participant-remove-button close ' + buttonClass + '" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+            '</li>';
+
             parent.append(participantHtml);
         });
     }
@@ -56,7 +60,8 @@ $('#participant-add-button').click(function() {
     }
 
     var participantHtml = 
-    '<li class="list-group-item">' + participant +
+    '<li class="list-group-item">' + 
+        '<span class="participant-item">' + participant + '</span>' +
         '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
             '<span aria-hidden="true">&times;</span>' +
         '</button>' +

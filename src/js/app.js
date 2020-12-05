@@ -136,6 +136,16 @@ App = {
                 console.warn(error);
             });
     },
+
+    getIssuerCertificateAt: function (issuerAddress, index) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                return instance.issuerCertificates(issuerAddress, index);
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
     
     getParticipantCertificates: function (participantAddress) {
         return App.contracts.Certification.deployed()
@@ -150,6 +160,16 @@ App = {
                 }
 
                 return certificates;
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
+
+    getParticipantCertificateAt : function (participantAddress, index) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                return instance.participantCertificates(participantAddress, index);
             })
             .catch(function (error) {
                 console.warn(error);
