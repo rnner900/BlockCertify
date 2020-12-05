@@ -15,18 +15,9 @@
     <iframe src="./header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
     
     <!-- Content -->
-    <div class="container">
+    <div class="container" id="search-results">
         <br/>
-        <h3>What is BlockCertify?</h3>
-        <p>
-            BlockCertify is a project with the aim of implementing certificate using the Ethereum Blockchain.
-        </p>
-        <br/>
-
-        <h3>Getting Started with BlockCertify?</h3>
-        <p>
-        
-        </p>
+        <h3 id="search-header">Search results for: </h3>
     </div>
     
     <!-- Include Footer -->
@@ -40,6 +31,8 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/searchresult.js"></script>
     <script src="js/search.js"></script>
+
 </body>
 </html>
