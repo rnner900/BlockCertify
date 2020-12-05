@@ -23,13 +23,14 @@ $(window).on('onContractReady', async function (e) {
 
     function render(parent, courses)  {
         courses.forEach(async function (course) {
-            var isCertificated = course[3];
-            var checkmark = (isCertificated == 'true') ? '&#10003;' : '&#10005;';
+            var isCertificated = course.certificated;
+            console.log(isCertificated);
+            var checkmark = (isCertificated == true) ? '&#10003;' : '&#10005;';
             var courseHtml = 
-            '<tr role="button" data-href="courseDetail.html?courseId=' + course[0] + '">' +
-                '<th scope="row">' + course[0] + '</th>' +
-                '<td>' + course[1] + '</td>' +
-                '<td>' + course[2] + '</td>' +
+            '<tr role="button" data-href="courseDetail.html?courseId=' + course.id + '">' +
+                '<th scope="row">' + course.id + '</th>' +
+                '<td>' + course.title + '</td>' +
+                '<td>' + course.issuer + '</td>' +
                 '<td>' + checkmark + '</td>' +
             '</tr>';
             parent.append(courseHtml);

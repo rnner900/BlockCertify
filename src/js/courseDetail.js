@@ -1,24 +1,21 @@
-$(window).on('onContractReady', function (e) {
+$(window).on('onContractReady', async function (e) {
     let searchParams = new URLSearchParams(window.location.search);
     let courseId = 0;
 
     if (searchParams.has('courseId')) {
         courseId = searchParams.get('courseId');
-        App.getCourse(courseId).then(function (course) {
-            if (course) {
-                course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
-                render(course);
-            }
-            App.getCourseParticipants(courseId).then(function (participants) {
-                console.log(participants);
-                renderParticipants(participants, course.issuer);
-            });
-        })
+        const course = await App.getCourse(courseId);
 
-        
+        if (course) {
+            render(course);
+
+            const participants = await App.getCourseParticipants(courseId);
+            renderParticipants(participants, course.issuer);
+        }
     }
 
     function render(course) {
+        console.log(course);
         $('#course-headline').html('Course ' + course.title + ' #' + course.id);
         $('#course-title-input').attr('placeholder', course.title);
         $('#course-issuer-input').attr('placeholder', course.issuer);
@@ -28,6 +25,10 @@ $(window).on('onContractReady', function (e) {
             $('#participant-save-button').hide();
             $('#issueCertificates-button').hide();
         }
+
+        console.log(course.certificated);
+        var checkmark = (course.certificated == true) ? '&#10003;' : '&#10005;';
+        $('#course-certificated').html(checkmark);
     }
 
     //////// EVENTS: //////// 

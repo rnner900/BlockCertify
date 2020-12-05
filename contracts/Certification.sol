@@ -37,15 +37,13 @@ contract Certification {
     uint public courseCount;
     address public contractAddress = msg.sender;
 
-    function addCourseCertificates(string memory _title, uint _courseId, string memory _imageId) public {
-        address[] memory participants = courses[_courseId].participants;
-
+    function issueCertificates(uint _courseId, string memory _title, string memory _imageId, address[] memory _issueParticipants) public {
         string memory courseTitle = courses[_courseId].title;
 
         require(courses[_courseId].issuer == msg.sender, "You are not owner of this course");
 
-        for (uint i = 0; i < participants.length; i++) {
-            address participant = participants[i];
+        for (uint i = 0; i < _issueParticipants.length; i++) {
+            address participant = _issueParticipants[i];
             
             participantCertificates[participant].push(
                 Certifate(msg.sender, participant, _title, _courseId, courseTitle, _imageId)
