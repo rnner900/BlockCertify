@@ -20,21 +20,22 @@ async function submitParticipantList(courseId) {
     }
 }
 
-function renderParticipants(participants) {
+function renderParticipants(participants, issuer) {
     let parent = $('#course-participant-list');
 
     if (participants) {
         participants.forEach(participant => {
-            var participantHtml = 
-            '<li class="list-group-item">' +
-                '<span class="small">' + participant + '</span>' +
-                '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
-                    '<span aria-hidden="true">&times;</span>' +
-                '</button>' +
-            '</li>';
+            var participantHtml = '<li class="list-group-item">' + participant;
+            if(issuer.toUpperCase() == App.account.toUpperCase()){
+                participantHtml += '<button type="button" class="participant-remove-button close" value="' + 
+                participant +'" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' + '</button>';
+            }
+            participantHtml += '</li>';
             parent.append(participantHtml);
         });
     }
+    $('#participant-header-amount').append(' ' + participants.length);
 }
 
 $('#participant-add-button').click(function() {
@@ -55,8 +56,7 @@ $('#participant-add-button').click(function() {
     }
 
     var participantHtml = 
-    '<li class="list-group-item">' + 
-        '<small class="participant">' + participant + '</small>' +
+    '<li class="list-group-item">' + participant +
         '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
             '<span aria-hidden="true">&times;</span>' +
         '</button>' +

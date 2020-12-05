@@ -9,12 +9,13 @@ $(window).on('onContractReady', function (e) {
                 course = { id: course[0], title: course[1], issuer : course[2], transaction : '0x923443122' };
                 render(course);
             }
+            App.getCourseParticipants(courseId).then(function (participants) {
+                console.log(participants);
+                renderParticipants(participants, course.issuer);
+            });
         })
 
-        App.getCourseParticipants(courseId).then(function (participants) {
-            console.log(participants);
-            renderParticipants(participants);
-        });
+        
     }
 
     function render(course) {
@@ -22,6 +23,11 @@ $(window).on('onContractReady', function (e) {
         $('#course-title-input').attr('placeholder', course.title);
         $('#course-issuer-input').attr('placeholder', course.issuer);
         $('#course-transaction-input').attr('placeholder', course.transaction);
+        if(course.issuer.toUpperCase() != App.account.toUpperCase()){
+            $('#participant-add').hide();
+            $('#participant-save-button').hide();
+            $('#issueCertificates-button').hide();
+        }
     }
 
     //////// EVENTS: //////// 
