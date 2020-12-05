@@ -12,6 +12,7 @@ async function submitParticipantList(courseId) {
             console.log(removeParticipants);
             await App.removeCourseParticipants(courseId, removeParticipants);
         }
+        window.location.reload();
     }
     catch(e) {
         console.log(e);
@@ -26,7 +27,7 @@ function renderParticipants(participants) {
         participants.forEach(participant => {
             var participantHtml = 
             '<li class="list-group-item">' +
-                '<small>' + participant + '</small>' +
+                '<span class="small">' + participant + '</span>' +
                 '<button type="button" class="participant-remove-button close" value="' + participant +'" data-dismiss="alert" aria-label="Close">' +
                     '<span aria-hidden="true">&times;</span>' +
                 '</button>' +

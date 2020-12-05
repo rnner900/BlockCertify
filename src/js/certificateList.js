@@ -14,7 +14,7 @@ $( document ).ready(function() {
         '<a href="certificateDetail.html?certificateId=' + certificate.id + '">' +
             '<div class="certificate-card card m-2 shadow rounded">' +
                 '<span class="certificate-card-arc small text-secondary d-none">' + certificate.title + '</span>' +
-                '<img src="./images/' + certificate.image + '.png" class="img-fluid" style="width: 180px; height: 180px;" alt="...">' +
+                '<img src="./images/' + certificate.image + '.png" class="img-fluid" alt="...">' +
                 '<div class="card-body">' +
                     '<span class="certificate-card-title m-0 d-block">' + certificate.title + '</span>' +
                     '<small class="certificate-card-issuer m-0 text-secondary d-block">From: ' + certificate.issuer + '</small>' +

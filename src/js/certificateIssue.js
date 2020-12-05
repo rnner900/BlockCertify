@@ -54,9 +54,15 @@ $(window).on('onContractReady', function (e) {
         if (participants) {
             $('.certificate-card-participant').first().text("For: " + participants.length + " different participants");
 
+            var c = 0;
             participants.forEach(participant => {
-                var participantHtml = '<li class="list-group-item"><small>' + participant + '</small></li>';
+                var participantHtml = 
+                '<li class="list-group-item">' +
+                        '<input checked type="checkbox" id="checkbox' + c + '"/> ' +
+                        '<label for="checkbox' + c + '"> ' + participant + '</label>' + 
+                '</li>';
                 parent.append(participantHtml);
+                c++;
             });
         }
     }
