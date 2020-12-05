@@ -74,14 +74,9 @@ contract("Certification", function(accounts) {
       }
       catch(e) { }
 
-      console.log("hi");
+      // check if participant count is still 0
       const courseA = await instance.courses(courseIdA);
       assert.equal(courseA.participantCount, 0);
-    });
-
-    it("courseA has participantA (at array index 0)", async function() {
-      const courseAParticipantA = await instance.getCourseParticipantAt(courseIdA, 0);
-      assert.equal(courseAParticipantA, participantA);
     });
 
     var courseIdB;
@@ -97,6 +92,28 @@ contract("Certification", function(accounts) {
       participants.push(participantB);
       await instance.addCourseParticipants(courseIdB, participants);
 
+      // check if participant count increased to 2
+      const courseB = await instance.courses(courseIdB);
+      assert.equal(courseB.participantCount, 2);
+    });
+
+    it("can't add participant twice to same course", async function() {
+      // these are the courses participants will be added to
+      courseIdB = await instance.issuerCourses(issuer, 1);
+
+      // these participants will be added to the courses
+      const participants = [];
+
+      // add participantA to courseA
+      participants.push(participantA);
+      participants.push(participantB);
+
+      try {
+        instance.addCourseParticipants(courseIdB, participants);
+      }
+      catch(e) { }
+
+      // check if participantCount is still 2
       const courseB = await instance.courses(courseIdB);
       assert.equal(courseB.participantCount, 2);
     });
@@ -113,14 +130,14 @@ contract("Certification", function(accounts) {
       assert.equal(participantACourseCount, 1);
     });
 
-    it("participantA has courseA", async function() {
-      const mCourseIdA = await instance.participantCourses(participantA, 0);
-      assert.equal(courseIdA, mCourseIdA);
+    it("participantA has courseB", async function() {
+      const mCourseIdB = await instance.participantCourses(participantA, 0);
+      assert.equal(courseIdB, mCourseIdB);
     });
 
-    it("participantB has 2 courses", async function() {
+    it("participantB has 1 course", async function() {
       const participantBCourseCount = await instance.getParticipantCourseCount(participantB);
-      assert.equal(participantBCourseCount, 2);
+      assert.equal(participantBCourseCount, 1);
     });
 
     it("participantB has courseA and courseB", async function() {
