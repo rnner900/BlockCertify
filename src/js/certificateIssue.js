@@ -1,4 +1,8 @@
 $(window).on('onContractReady', function (e) {
+
+    let issueParticipants = [];
+    let selectedImageId = 00;
+
     let searchParams = new URLSearchParams(window.location.search);
     let courseId;
 
@@ -13,6 +17,7 @@ $(window).on('onContractReady', function (e) {
         })
 
         App.getCourseParticipants(courseId).then(function (participants) {
+            issueParticipants = participants;
             renderParticipants(participants);
         });
     }
@@ -52,13 +57,35 @@ $(window).on('onContractReady', function (e) {
         let parent = $('#course-participant-list');
 
         if (participants) {
-            $('.certificate-card-participant').first().text("For: " + participants.length + " different participants");
+            $('.certificate-card-participant').first().text("For: " + participants.length + " participants");
 
+            var c = 0;
             participants.forEach(participant => {
-                var participantHtml = '<li class="list-group-item"><small>' + participant + '</small></li>';
+                var participantHtml = 
+                '<li class="list-group-item">' +
+                    '<input checked class="issue-participant-checkbox" type="checkbox" id="checkbox' + c + '" value="' + participant + '"/> ' +
+                    '<label for="checkbox' + c + '"> ' + participant + '</label>' + 
+                '</li>';
                 parent.append(participantHtml);
+                c++;
             });
         }
+
+        $('body').on('change', '.issue-participant-checkbox', function() {
+            const isChecked = $(this).is(":checked");
+            const participant = $(this).val();
+            if (isChecked) {
+                issueParticipants.push(participant);
+            }
+            else {
+                // remove participant from list
+                const index = issueParticipants.indexOf(participant);
+                if (index > -1) {
+                    issueParticipants.splice(index, 1);
+                }
+            }
+            $('.certificate-card-participant').first().text("For: " + issueParticipants.length + " participants");
+        })
     }
 
     function renderImages(images) {
@@ -75,8 +102,17 @@ $(window).on('onContractReady', function (e) {
 
 
     //////// EVENTS: //////// 
+    $("#issue-certificates-button").click(async function() {
+        const title = $('#certificate-title-input').val();
+        alert(title);
+        alert(selectedImageId);
+        alert(issueParticipants);
+        await App.issueCertificates(courseId, title, selectedImageId, issueParticipants);
+        window.location.href = "./certificateList.html";
+    });
+
     $('#certificate-title-input').on('change keydown paste input', function(){
-        text = this.value;
+        var text = $('#certificate-title-input').val();
         $('.certificate-card-title').first().text(text);
 
         if (text.length > 19) {
@@ -95,10 +131,9 @@ $(window).on('onContractReady', function (e) {
         $('.certifiate-image-input.bg-primary').removeClass("bg-primary");
 
         var imageSrc = $(this).find('img').attr("src");
-        var imageIndex = imageSrc.split('/')[1].split('.')[0];
+        selectedImageId = imageSrc.split('/')[1].split('.')[0];
 
         $('.certificate-card-image').first().attr("src", imageSrc);
-        $('#certificate-image-input').val(imageIndex);
         
         $(this).addClass("bg-primary");
     }); 

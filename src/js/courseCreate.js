@@ -1,10 +1,6 @@
 $(window).on('onContractReady', function (e) {
     var newParticipants = [];
 
-    $( "#course-participant-add" ).click(function() {
-        alert( "Handler for .click() called." );
-    });
-
     //////// EVENTS: //////// 
     $('#submit').click(async function() {
         var title = $('#course-title-input').val();

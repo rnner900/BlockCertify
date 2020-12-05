@@ -12,6 +12,7 @@ async function submitParticipantList(courseId) {
             console.log(removeParticipants);
             await App.removeCourseParticipants(courseId, removeParticipants);
         }
+        window.location.reload();
     }
     catch(e) {
         console.log(e);

@@ -124,12 +124,28 @@ App = {
                 console.log(issuerAddress);
                 var certificateCount = await instance.getIssuerCertificateCount(issuerAddress);
                 var certificates = [];
-                console.log(certificateCount);
-                var certificate = await instance.issuerCertificates(issuerAddress, 3);
-                console.log(certificate);
 
                 for (let i = 0; i < certificateCount; i++) {
                     var certificate = await instance.issuerCertificates(issuerAddress, i);
+                    certificates.push(certificate);
+                }
+
+                return certificates;
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
+    
+    getParticipantCertificates: function (participantAddress) {
+        return App.contracts.Certification.deployed()
+            .then(async function (instance) {
+                console.log(participantAddress);
+                var certificateCount = await instance.getParticipantCertificateCount(participantAddress);
+                var certificates = [];
+
+                for (let i = 0; i < certificateCount; i++) {
+                    var certificate = await instance.participantCertificates(participantAddress, i);
                     certificates.push(certificate);
                 }
 
@@ -203,6 +219,16 @@ App = {
         return App.contracts.Certification.deployed()
             .then(function (instance) {
                 return instance.addCourse(title, { from: App.account });
+            })
+            .catch(function (error) {
+                console.warn(error);
+            });
+    },
+
+    issueCertificates: async function (courseId, title, imageId, issueParticipants) {
+        return App.contracts.Certification.deployed()
+            .then(function (instance) {
+                return instance.issueCertificates(courseId, title, imageId, issueParticipants, { from: App.account });
             })
             .catch(function (error) {
                 console.warn(error);

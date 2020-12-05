@@ -7,10 +7,49 @@
     background-color: #cccccc;
 }
 
-.certificate-card {
+.certificate-card {     
     display: inline-block;
+    width: 185px;
+}
+
+.certificate-card .certificate-card-issuer {
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.certificate-card .certificate-card-participant {
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.certificate-card > img{  
+    width: 100%;
 }
 
 .certificate-card > .certificate-card-arc{
     top: 40px; right: 0; left: 0; letter-spacing: -0.1em;
+}
+
+#course-participant-list > .list-group-item {
+    white-space: nowrap;
+    width: 100%;
+    line-height: 1.15;
+}
+
+#course-participant-list > .list-group-item input {
+    position: absolute;
+    margin-top: 4px;
+}
+
+#course-participant-list > .list-group-item label {
+    width: 100%;
+    padding-left: 20px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0 !important;
 }

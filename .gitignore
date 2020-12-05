@@ -104,4 +104,6 @@ dist
 .tern-port
 
 # build files
-build/
+build
+build/contracts/Migrations.json
+build/contracts/Certification.json
