@@ -22,12 +22,10 @@ $(window).on('onContractReady', function (e) {
             console.warn(error);
         });
 
-    console.log("A");
     App.getIssuerCourses(App.account)
         .then(function (courses) {
             // show courses of constructors address, TODO: show users courses
             var courseOverview = $('#courseOverview');
-            console.log(courses);
             courseOverview.empty();
             courses.forEach(course => {
                 var courseTemplate = '<tr><th>' + course[0] + '</th><td>' + course[1] + '</td><td>';

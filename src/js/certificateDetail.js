@@ -7,19 +7,6 @@ $(window).on('onContractReady', async function (e) {
         const index = searchParams.get('index');
         
         const certificate = await App.getIssuerCertificateAt(issuerAddress, index);
-        console.log(certificate);
-        /*
-        let certificate = { 
-            id: certificateId,
-            imageId: '05',
-            title:'Web Development III', 
-            issuer:'0x123424', 
-            participant:'0x234233',
-            courseTitle:'Web Development',
-            transaction:'0x65433'
-        }
-        */
-
         render(certificate);
     }
     else if (searchParams.has('participantAddress') && searchParams.has('index')) {
@@ -27,7 +14,6 @@ $(window).on('onContractReady', async function (e) {
         const index = searchParams.get('index');
 
         const certificate = await App.getParticipantCertificateAt(participantAddress, index);
-        console.log(certificate);
 
         render(certificate);
     }

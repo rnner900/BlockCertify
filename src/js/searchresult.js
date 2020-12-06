@@ -7,7 +7,6 @@ $(window).on('onContractReady', function (e) {
             if(web3.utils.isAddress(searchQuery)){
                 try {
                     let searchAddress = web3.utils.toChecksumAddress(searchQuery)
-                    console.log(searchAddress);
                     gatherInformation(searchAddress);
                     
                 } catch(e) { 
