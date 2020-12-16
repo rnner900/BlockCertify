@@ -14,10 +14,9 @@
 This DApp is a Certification System that uses a Blockchain for storing Certificates and Courses. There are two roles: issuer, participant. 
 
 As an issuer you can create courses. The issuer can add and remove participants addresses to the course. After that the course owner can generate certificates for a selection of the course participants. These certificates are stored in a ethereum block chain as transactions of a smart contract. 
-
 As a participant the application displays courses he participates and certificates he received. 
-
-Both roles log in with metamask with the address and private Key for the (local) blockchain. You can learn more about this project in the project documentation.
+Both roles log in with metamask with the address and private Key for the (local) blockchain. 
+You can learn more about this project by reading the documentation. 
 
 ## Documentation
 ---> [Documentation](Documentation.pdf) <---
