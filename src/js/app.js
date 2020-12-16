@@ -271,7 +271,6 @@ App = {
             .then(function (result) {
                 // Render the new balance and all contracts
                 App.render();
-                alert('Success:\nCertificate ' + title + ' of Course ' + course + ' has been given to ' + collector);
             })
             .catch(function (err) {
                 console.error(err);
@@ -312,7 +311,6 @@ App = {
             .then(function (result) {
                 // Render the new balance and all contracts
                 App.render();
-                alert('Success:\nCourse ' + course + ' was successfully created.');
             })
             .catch(function (err) {
                 console.error(err);
