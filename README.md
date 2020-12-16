@@ -15,17 +15,19 @@
 ## About
 Certification System that uses a Blockchain. There are two roles: issuer, participant. As an issuer you can create courses. The issuer can add and remove participants addresses to the course. After that the course owner can generate certificates for a selection of the course participants. These certificates are stored in a ethereum block chain. As a participant the application displays courses i participate and certificates i received. Both roles log in with metamask with the address and private Key for the (local) blockchain.
 
-## Documentation
-<img height="220" src="BlockCertify_Certificate.png">
-
-
 ## Requirements
 * NodeJS [(download & install)](https://nodejs.org/en/)
 * Ganache [(follow the official Quickstart guide)](https://www.trufflesuite.com/docs/ganache/quickstart)
 * Metamask Browser Plugin [(install in your browser, supports Chrome, Firefox, IE and Brave)](https://metamask.io/download.html)
 
 ## Installation Guide
-<img height="220" src="InstallationGuide.png">
+[Installation Guide](InstallationGuide.pdf)
+
+## Documentation
+<img height="220" src="BlockCertify_Certificate.png">
+
+
+
 
 
 ## Developer Links
