@@ -6,14 +6,15 @@
 ## Table of Contents
 
 - [About](#about)
-- [Functionality](#functionality)
-- [Documents](#documents)
+- [Documentation](#documentation)
 - [Requirements](#requirements)
-- [Installation](#installation)
-- [Run application](#run-application)
+- [Installation](#installation-guide)
 
 ## About
 Certification System that uses a Blockchain. There are two roles: issuer, participant. As an issuer you can create courses. The issuer can add and remove participants addresses to the course. After that the course owner can generate certificates for a selection of the course participants. These certificates are stored in a ethereum block chain. As a participant the application displays courses i participate and certificates i received. Both roles log in with metamask with the address and private Key for the (local) blockchain.
+
+## Documentation
+>>> [Documentation](Documentation.pdf) <<<
 
 ## Requirements
 * NodeJS [(download & install)](https://nodejs.org/en/)
@@ -21,13 +22,19 @@ Certification System that uses a Blockchain. There are two roles: issuer, partic
 * Metamask Browser Plugin [(install in your browser, supports Chrome, Firefox, IE and Brave)](https://metamask.io/download.html)
 
 ## Installation Guide
-[Installation Guide](InstallationGuide.pdf)
+>>> You can simply follow the steps of the step by step [Installation & Running Guide](InstallationGuide.pdf) <<<
 
-## Documentation
-<img height="220" src="BlockCertify_Certificate.png">
+Installation:
+1. Clone this repository. (`git clone https://github.com/rnner900/BlockCertify.git`)
+2. Navigate to the project in terminal. (`cd BlockCertify`)
+3. running `npm install` will install all needed node modules and dependencies
+4. running `npm install -g truffle` will install [Truffle](https://www.npmjs.com/package/truffle) the used development environment for Ethereum
 
-
-
+Running:
+1. Make sure ganache is running (on http://127.0.0.1:7545 which is default in [Quickstart](https://www.trufflesuite.com/docs/ganache/quickstart) but can be changed in the [Settings](https://www.trufflesuite.com/docs/ganache/reference/ganache-settings))
+2. Run `truffle migrate --reset` to compile the smart contracts
+3. Run `npm run dev` to launch the `lite-server`
+4. Connect to the Frontend with Metamask in your Browser [(step-by-step guide,](https://github.com/mkqavi/dhbw-truffle-project#connect-to-frontend-in-browser) do step 1-5) and import your ganache account data into Metamask by its private key
 
 
 ## Developer Links
