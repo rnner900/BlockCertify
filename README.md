@@ -14,7 +14,7 @@
 Certification System that uses a Blockchain. There are two roles: issuer, participant. As an issuer you can create courses. The issuer can add and remove participants addresses to the course. After that the course owner can generate certificates for a selection of the course participants. These certificates are stored in a ethereum block chain. As a participant the application displays courses i participate and certificates i received. Both roles log in with metamask with the address and private Key for the (local) blockchain.
 
 ## Documentation
->>> [Documentation](Documentation.pdf) <<<
+---> [Documentation](Documentation.pdf) <---
 
 ## Requirements
 * NodeJS [(download & install)](https://nodejs.org/en/)
@@ -22,7 +22,7 @@ Certification System that uses a Blockchain. There are two roles: issuer, partic
 * Metamask Browser Plugin [(install in your browser, supports Chrome, Firefox, IE and Brave)](https://metamask.io/download.html)
 
 ## Installation Guide
->>> You can simply follow the steps of the step by step [Installation & Running Guide](InstallationGuide.pdf) <<<
+---> You can simply follow the steps of the step by step [Installation & Running Guide](InstallationGuide.pdf) <---
 
 Installation:
 1. Clone this repository. (`git clone https://github.com/rnner900/BlockCertify.git`)
