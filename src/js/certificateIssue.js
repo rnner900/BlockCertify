@@ -104,9 +104,6 @@ $(window).on('onContractReady', function (e) {
     //////// EVENTS: //////// 
     $("#issue-certificates-button").click(async function() {
         const title = $('#certificate-title-input').val();
-        alert(title);
-        alert(selectedImageId);
-        alert(issueParticipants);
         await App.issueCertificates(courseId, title, selectedImageId, issueParticipants);
         window.location.href = "./certificateList.html";
     });

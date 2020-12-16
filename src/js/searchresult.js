@@ -7,7 +7,6 @@ $(window).on('onContractReady', function (e) {
             if(web3.utils.isAddress(searchQuery)){
                 try {
                     let searchAddress = web3.utils.toChecksumAddress(searchQuery)
-                    console.log(searchAddress);
                     gatherInformation(searchAddress);
                     
                 } catch(e) { 
@@ -36,12 +35,12 @@ async function gatherInformation(address) {
     render(participantCoursesParent, participantCourses);
     
 
-    var issuerCertificates = await App.getIssuerCertificates(App.account);
+    var issuerCertificates = await App.getIssuerCertificates(address);
     $('#headingIssuerCertificates').find("button").append(' (' + issuerCertificates.length + ')')
     var issuerParent = $('#issuer-certificates-parent');
     renderCertificates(issuerCertificates, issuerParent, 'issuer');
 
-    var participantCertificates = await App.getParticipantCertificates(App.account);
+    var participantCertificates = await App.getParticipantCertificates(address);
     $('#headingParticipantCertificates').find("button").append(' (' + participantCertificates.length + ')')
     var participantParent = $('#participant-certificates-parent');
     renderCertificates(participantCertificates, participantParent, 'participant');

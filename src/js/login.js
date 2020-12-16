@@ -14,7 +14,7 @@ App = {
          * application to talk to the blockchain. We configure web3 here.
          */
 
-        if (typeof web3 === 'undefined') {
+        if (typeof web3 === 'undefined' && !window.location.hash) {
             // Metamask not installed
             alert('Metamask is not installed, please install Metamask if you want to use this application.');
             return;

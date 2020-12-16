@@ -91,14 +91,12 @@ App = {
     getIssuerCourses: function (issuerAddress) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                console.log(issuerAddress);
                 var courseCount = await instance.getIssuerCourseCount(issuerAddress);
                 var courses = [];
 
                 for (let i = 0; i < courseCount; i++) {
                     var courseId = await instance.issuerCourses(issuerAddress, i);
                     var course = await instance.courses(courseId);
-                    console.log(course);
                     courses.push(course);
                 }
 
@@ -112,14 +110,12 @@ App = {
     getParticipantCourses: function (participantAddress) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                console.log(participantAddress);
                 var courseCount = await instance.getParticipantCourseCount(participantAddress);
                 var courses = [];
 
                 for (let i = 0; i < courseCount; i++) {
                     var courseId = await instance.participantCourses(participantAddress, i);
                     var course = await instance.courses(courseId);
-                    console.log(course);
                     courses.push(course);
                 }
 
@@ -133,7 +129,6 @@ App = {
     getIssuerCertificates: function (issuerAddress) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                console.log(issuerAddress);
                 var certificateCount = await instance.getIssuerCertificateCount(issuerAddress);
                 var certificates = [];
 
@@ -162,7 +157,6 @@ App = {
     getParticipantCertificates: function (participantAddress) {
         return App.contracts.Certification.deployed()
             .then(async function (instance) {
-                console.log(participantAddress);
                 var certificateCount = await instance.getParticipantCertificateCount(participantAddress);
                 var certificates = [];
 
@@ -204,12 +198,10 @@ App = {
                 var participants = [];
                 var course = await instance.courses(courseId);
                 var participantCount = course[4];
-                console.log(course);
                 for (var i = 0; i < participantCount; i++) {
                     var participant = await instance.getCourseParticipantAt(courseId, i);
                     participants.push(participant);
                 }
-                console.log(participants);
                 return participants;
             })
             .catch(function (error) {
@@ -279,7 +271,6 @@ App = {
             .then(function (result) {
                 // Render the new balance and all contracts
                 App.render();
-                alert('Success:\nCertificate ' + title + ' of Course ' + course + ' has been given to ' + collector);
             })
             .catch(function (err) {
                 console.error(err);
@@ -315,13 +306,11 @@ App = {
         $('#courseName').val('');
         App.contracts.Certification.deployed()
             .then(function (instance) {
-                console.log(course);
                 return instance.addCourse(course, { from: App.account });
             })
             .then(function (result) {
                 // Render the new balance and all contracts
                 App.render();
-                alert('Success:\nCourse ' + course + ' was successfully created.');
             })
             .catch(function (err) {
                 console.error(err);
@@ -331,4 +320,12 @@ App = {
 
 window.addEventListener('load', function () {
     App.init();
+    // search functionality
+    $('#search-input-value').focus(function () {
+        $(this).attr('data-default', $(this).width());
+        $(this).animate({width: 320});
+    }).blur(function () {
+        var w = $(this).attr('data-default');
+        $(this).animate({ width: w }, 'slow');
+    });
 });

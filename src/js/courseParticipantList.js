@@ -5,11 +5,9 @@ var removeParticipants = [];
 async function submitParticipantList(courseId) {
     try {
         if (newParticipants.length > 0) {
-            console.log(newParticipants);
             await App.addCourseParticipants(courseId, newParticipants);
         }
         if (removeParticipants.length > 0) {
-            console.log(removeParticipants);
             await App.removeCourseParticipants(courseId, removeParticipants);
         }
         window.location.reload();
