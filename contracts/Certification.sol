@@ -22,21 +22,19 @@ contract Certification {
         address[] participants;
     }
 
-    // map issuer address to Certifate to get own created Certifates
-    mapping(address => Certifate[]) public issuerCertificates;
-    // map participant to Certifate to get received Certifates
-    mapping(address => Certifate[]) public participantCertificates;
 
-    // map issuer address to Courses to get own created Courses
-    mapping(address => uint[]) public issuerCourses;
-    // map participant to Courses to get Courses where the user is a participant
-    mapping(address => uint[]) public participantCourses;
+    mapping(address => Certifate[]) public issuerCertificates;      // map issuer to certificate
+    mapping(address => Certifate[]) public participantCertificates; // map participant to certificate
 
-    mapping(uint => Course) public courses;
+    mapping(address => uint[]) public issuerCourses;                // map issuer to course
+    mapping(address => uint[]) public participantCourses;           // map participant to course
+
+    mapping(uint => Course) public courses;                         // map course id to course
 
     uint public courseCount;
     address public contractAddress = msg.sender;
 
+    // issuer certificate for a course
     function issueCertificates(uint _courseId, string memory _title, string memory _imageId, address[] memory _issueParticipants) public {
         string memory courseTitle = courses[_courseId].title;
 
@@ -77,6 +75,8 @@ contract Certification {
         return courses[_courseId].participants[index];
     }
 
+    // Adds / issues a course with a title. 
+    // The course issuer will be set to the address that calls this methode
     function addCourse (string memory _title) public {
         courses[courseCount] = Course(courseCount, _title, msg.sender, false, 0, new address[](0));
         issuerCourses[msg.sender].push(courseCount);
@@ -171,6 +171,7 @@ contract Certification {
         issuerCourses[mockIssuer].push(courseCount);
         courseCount++;
 
-        addCourse("Power Engineering 1"); // course id: 1
+        // add a course for testing
+        addCourse("Power Engineering 1");
     }
 }

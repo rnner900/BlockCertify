@@ -17,13 +17,13 @@ function newCertificateItem(href, certificate) {
 function applyCircleType() {
     $('.certificate-card > .certificate-card-arc').each(function(){
         text = $(this).text();
-        if (text.length > 19) {
-            text = text.slice(0, 18) + "...";
+        if (text.length > 30) {
+            text = text.slice(0, 29) + "...";
         }
         $(this).text(text);
         $(this).removeClass('d-none');
         $(this).circleType(
-            { position: 'absolute', radius: 45 }
+            { position: 'absolute', radius: 53 }
         );
     });
 }

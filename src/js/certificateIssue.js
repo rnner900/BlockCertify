@@ -115,14 +115,14 @@ $(window).on('onContractReady', function (e) {
         var text = $('#certificate-title-input').val();
         $('.certificate-card-title').first().text(text);
 
-        if (text.length > 19) {
-            text = text.slice(0, 18) + "...";
+        if (text.length > 30) {
+            text = text.slice(0, 29) + "...";
         }
         $('.certificate-card > .certificate-card-arc').each(function(){
             $(this).text(text);
             $(this).removeClass('d-none');
             $(this).circleType(
-                { position: 'absolute', radius: 45 }
+                { position: 'absolute', radius: 53 }
             );
         });
     });
