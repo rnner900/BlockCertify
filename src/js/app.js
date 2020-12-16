@@ -320,6 +320,7 @@ App = {
 
 window.addEventListener('load', function () {
     App.init();
+    // search functionality
     $('#search-input-value').focus(function () {
         $(this).attr('data-default', $(this).width());
         $(this).animate({width: 320});
