@@ -51,7 +51,7 @@ Jacob Haase
 Theo Remmert
 Tobias Böck
 
-matriculation number (not in order): 4691004, 9087213, 7903581, 6942414
+(matriculation numbers are listed in the documentation)
 
 ## Developer Links
 * [Team Description](https://dhbwstg-my.sharepoint.com/:w:/g/personal/inf18200_lehre_dhbw-stuttgart_de/EQepBS1bCaZKkkIirMOSuSkB5mS8uptXrDt5dB3pTiHiKw?e=5psYY9)
