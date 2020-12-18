@@ -9,6 +9,7 @@
 - [Documentation](#documentation)
 - [Requirements](#requirements)
 - [Installation](#installation-guide)
+- [Testing](#testing)
 
 ## About
 This DApp is a Certification System that uses a Blockchain for storing Certificates and Courses. There are two roles: issuer, participant. 
@@ -43,6 +44,9 @@ Running:
 3. Run `npm run dev` to launch the `lite-server`
 4. Connect to the Frontend with Metamask in your Browser [(step-by-step guide,](https://github.com/mkqavi/dhbw-truffle-project#connect-to-frontend-in-browser) do step 1-5) and import your ganache account data into Metamask by its private key
 
+## Testing
+Most of the functions of the smart contract is tested. To run the tests make sure ganache is running and your smart contract is migrated on the blockchain.
+After that run `truffle test` to excecute the tests. ([You can see the test results here](TestResults.png))
 
 ## Developers
 Group 4 of Blockchain course at DHBW Stuttgart:
