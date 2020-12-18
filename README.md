@@ -1,7 +1,7 @@
 <img src="BlockCertifyLogo.png" height="35" align="right" />
 
 # BlockCertify ![Cool](https://img.shields.io/badge/%F0%9F%93%9C-certificated-blue)
->Certification instance based on solidity for the Ethereum Blockchain
+>Certification instance based on solidity for the Ethereum Blockchain. Blockchain Project at the DHBW Stuttgart by Group 4.
 
 ## Table of Contents
 
@@ -43,6 +43,15 @@ Running:
 3. Run `npm run dev` to launch the `lite-server`
 4. Connect to the Frontend with Metamask in your Browser [(step-by-step guide,](https://github.com/mkqavi/dhbw-truffle-project#connect-to-frontend-in-browser) do step 1-5) and import your ganache account data into Metamask by its private key
 
+
+## Developers
+Group 4 of Blockchain course at DHBW Stuttgart:
+Daniel Widmayer
+Jacob Haase
+Theo Remmert
+Tobias Böck
+
+matriculation number (not in order): 4691004, 9087213, 7903581, 6942414
 
 ## Developer Links
 * [Team Description](https://dhbwstg-my.sharepoint.com/:w:/g/personal/inf18200_lehre_dhbw-stuttgart_de/EQepBS1bCaZKkkIirMOSuSkB5mS8uptXrDt5dB3pTiHiKw?e=5psYY9)
